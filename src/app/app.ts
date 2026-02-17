@@ -66,6 +66,11 @@ import { LocationSearchComponent } from './shared/components/location-search.com
 
     <footer class="app-footer">
       <p>Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></p>
+      <div class="footer-links">
+        <a href="https://corvid-agent.github.io/" target="_blank" rel="noopener">Home</a>
+        <a href="https://corvid-agent.github.io/space-dashboard/" target="_blank" rel="noopener">Space</a>
+        <a href="https://corvid-agent.github.io/bw-cinema/" target="_blank" rel="noopener">Cinema</a>
+      </div>
     </footer>
 
     <!-- Mobile bottom nav -->
@@ -172,6 +177,12 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       font-size: 0.8rem;
     }
     .app-footer a { color: var(--accent-gold); }
+    .footer-links {
+      display: flex; justify-content: center; gap: var(--space-md);
+      margin-top: var(--space-xs); font-size: 0.8rem;
+    }
+    .footer-links a { color: var(--text-tertiary); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--accent-gold); }
 
     /* Mobile bottom nav */
     .bottom-nav {
