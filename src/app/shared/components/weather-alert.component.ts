@@ -1,0 +1,89 @@
+import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { CurrentWeather } from '../../core/models/weather.model';
+
+interface WeatherAlert {
+  type: 'warning' | 'danger';
+  icon: string;
+  message: string;
+}
+
+const SEVERE_CODES: Record<number, { type: 'warning' | 'danger'; message: string }> = {
+  57: { type: 'warning', message: 'Dense freezing drizzle — roads may be icy' },
+  65: { type: 'warning', message: 'Heavy rainfall in your area' },
+  67: { type: 'danger', message: 'Heavy freezing rain — dangerous road conditions' },
+  75: { type: 'warning', message: 'Heavy snowfall expected' },
+  82: { type: 'danger', message: 'Violent rain showers — take shelter' },
+  86: { type: 'warning', message: 'Heavy snow showers in progress' },
+  95: { type: 'danger', message: 'Thunderstorm in your area — stay indoors' },
+  96: { type: 'danger', message: 'Thunderstorm with hail — seek shelter immediately' },
+  99: { type: 'danger', message: 'Severe thunderstorm with heavy hail — take cover' },
+};
+
+@Component({
+  selector: 'app-weather-alert',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    @for (alert of alerts(); track alert.message) {
+      <div class="alert-banner" [class]="'alert-' + alert.type" role="alert">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          @if (alert.type === 'danger') {
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          } @else {
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          }
+        </svg>
+        <span class="alert-text">{{ alert.message }}</span>
+      </div>
+    }
+  `,
+  styles: [`
+    .alert-banner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      animation: slideDown 0.3s ease-out;
+    }
+    .alert-warning {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+    .alert-danger {
+      background: rgba(248, 113, 113, 0.15);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      color: #f87171;
+    }
+    .alert-text { flex: 1; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  `],
+})
+export class WeatherAlertComponent {
+  readonly current = input.required<CurrentWeather>();
+
+  readonly alerts = computed<WeatherAlert[]>(() => {
+    const c = this.current();
+    const result: WeatherAlert[] = [];
+
+    const severe = SEVERE_CODES[c.weather_code];
+    if (severe) {
+      result.push({ type: severe.type, icon: 'alert', message: severe.message });
+    }
+
+    if (c.wind_gusts_10m > 80) {
+      result.push({ type: 'danger', icon: 'wind', message: `Dangerous wind gusts of ${Math.round(c.wind_gusts_10m)} km/h` });
+    } else if (c.wind_gusts_10m > 60) {
+      result.push({ type: 'warning', icon: 'wind', message: `Strong wind gusts of ${Math.round(c.wind_gusts_10m)} km/h` });
+    }
+
+    return result;
+  });
+}

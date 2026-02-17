@@ -21,6 +21,7 @@ import { AstronomyCardComponent } from '../../shared/components/astronomy-card.c
 import { AqiGaugeComponent } from '../../shared/components/aqi-gauge.component';
 import { HistoricalComparisonComponent } from '../../shared/components/historical-comparison.component';
 import { ComfortCardComponent } from '../../shared/components/comfort-card.component';
+import { WeatherAlertComponent } from '../../shared/components/weather-alert.component';
 import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton.component';
 import { ErrorCardComponent } from '../../shared/components/error-card.component';
 import { TemperaturePipe } from '../../shared/pipes/temperature.pipe';
@@ -36,7 +37,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     LocationSearchComponent, CurrentConditionsComponent, HourlyChartComponent,
     DailyRowComponent, PrecipitationChartComponent, WindCompassComponent,
     UvMeterComponent, AstronomyCardComponent, AqiGaugeComponent,
-    HistoricalComparisonComponent, ComfortCardComponent,
+    HistoricalComparisonComponent, ComfortCardComponent, WeatherAlertComponent,
     LoadingSkeletonComponent, ErrorCardComponent,
     TemperaturePipe, WindSpeedPipe,
   ],
@@ -118,6 +119,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
             </div>
           </div>
 
+          <app-weather-alert [current]="forecast()!.current" />
           <app-current-conditions [current]="forecast()!.current" />
 
           @if (todayForecast()) {

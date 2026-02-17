@@ -11,33 +11,34 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
     <div class="glass-card astro-card">
       <h3 class="card-label">Sun & Moon</h3>
 
-      <div class="sun-times">
-        <div class="sun-item">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent-yellow)" stroke-width="2">
-            <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-5.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-12.73l1.41 1.41m8.73 8.73l1.41 1.41"/>
-            <circle cx="12" cy="12" r="5"/>
-          </svg>
-          <div class="sun-detail">
-            <span class="sun-label">Sunrise</span>
-            <span class="sun-value">{{ sunriseTime() }}</span>
-          </div>
-        </div>
-        <div class="sun-item">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent-orange)" stroke-width="2">
-            <path d="M12 10v2m0 16v2m10-10h-2M4 12H2m15.07-5.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-12.73l1.41 1.41m8.73 8.73l1.41 1.41"/>
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="2" y1="20" x2="22" y2="20"/>
-          </svg>
-          <div class="sun-detail">
-            <span class="sun-label">Sunset</span>
-            <span class="sun-value">{{ sunsetTime() }}</span>
-          </div>
-        </div>
+      <!-- Sun arc visualization -->
+      <div class="sun-arc-wrap">
+        <svg class="sun-arc" viewBox="0 0 200 80" preserveAspectRatio="xMidYMid meet">
+          <!-- Arc path (semicircle) -->
+          <path d="M 20 70 Q 100 -20 180 70" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3" />
+          <!-- Horizon line -->
+          <line x1="10" y1="70" x2="190" y2="70" stroke="var(--border)" stroke-width="1" />
+          <!-- Filled arc up to sun position -->
+          @if (sunProgress() > 0 && sunProgress() < 1) {
+            <circle [attr.cx]="sunX()" [attr.cy]="sunY()" r="6" fill="var(--accent-gold)" />
+            <circle [attr.cx]="sunX()" [attr.cy]="sunY()" r="10" fill="var(--accent-gold)" opacity="0.2" />
+          }
+          <!-- Sunrise label -->
+          <text x="20" y="66" text-anchor="middle" fill="var(--text-tertiary)" font-size="7" font-weight="500">{{ sunriseTime() }}</text>
+          <!-- Sunset label -->
+          <text x="180" y="66" text-anchor="middle" fill="var(--text-tertiary)" font-size="7" font-weight="500">{{ sunsetTime() }}</text>
+        </svg>
       </div>
 
-      <div class="daylight">
-        <span class="dl-label">Daylight</span>
-        <span class="dl-value">{{ daylightStr() }}</span>
+      <div class="daylight-row">
+        <div class="daylight">
+          <span class="dl-label">Daylight</span>
+          <span class="dl-value">{{ daylightStr() }}</span>
+        </div>
+        <div class="daylight">
+          <span class="dl-label">Sunshine</span>
+          <span class="dl-value">{{ sunshineStr() }}</span>
+        </div>
       </div>
 
       <div class="moon-section">
@@ -63,26 +64,25 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
       color: var(--text-tertiary);
       margin: 0;
     }
-    .sun-times {
+    .sun-arc-wrap {
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .sun-arc { width: 100%; height: auto; }
+    .daylight-row {
       display: flex;
       gap: var(--space-lg);
-    }
-    .sun-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-    }
-    .sun-detail { display: flex; flex-direction: column; }
-    .sun-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .sun-value { font-size: 1rem; font-weight: 600; }
-    .daylight {
-      display: flex;
-      justify-content: space-between;
       padding: var(--space-sm) 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .dl-label { font-size: 0.85rem; color: var(--text-tertiary); }
+    .daylight {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .dl-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
     .dl-value { font-size: 0.95rem; font-weight: 600; }
     .moon-section {
       display: flex;
@@ -101,5 +101,29 @@ export class AstronomyCardComponent {
   readonly sunriseTime = computed(() => formatTime(this.today().sunrise));
   readonly sunsetTime = computed(() => formatTime(this.today().sunset));
   readonly daylightStr = computed(() => formatDuration(this.today().daylightDuration));
+  readonly sunshineStr = computed(() => formatDuration(this.today().sunshineDuration));
   readonly moonInfo = computed(() => getMoonPhase(this.today().date));
+
+  /** 0 = sunrise, 1 = sunset, <0 before sunrise, >1 after sunset */
+  readonly sunProgress = computed(() => {
+    const now = new Date();
+    const rise = this.today().sunrise.getTime();
+    const set = this.today().sunset.getTime();
+    if (set === rise) return 0.5;
+    return (now.getTime() - rise) / (set - rise);
+  });
+
+  /** X position on the arc SVG (20–180) */
+  readonly sunX = computed(() => {
+    const t = Math.max(0, Math.min(1, this.sunProgress()));
+    return 20 + t * 160;
+  });
+
+  /** Y position on the arc SVG — follows a quadratic bezier Q 100 -20 */
+  readonly sunY = computed(() => {
+    const t = Math.max(0, Math.min(1, this.sunProgress()));
+    // Quadratic bezier: P0=(20,70), P1=(100,-20), P2=(180,70)
+    const y = (1 - t) * (1 - t) * 70 + 2 * (1 - t) * t * (-20) + t * t * 70;
+    return y;
+  });
 }
