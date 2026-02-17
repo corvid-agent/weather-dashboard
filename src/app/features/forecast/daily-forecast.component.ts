@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, effect, computed } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
 import { LocationService } from '../../core/services/location.service';
 import { WeatherService } from '../../core/services/weather.service';
@@ -25,7 +26,12 @@ import { getUvCategory } from '../../core/utils/uv.utils';
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
           Back
         </a>
-        <h1 class="page-title">7-Day Forecast</h1>
+        <div class="page-title-wrap">
+          <h1 class="page-title">7-Day Forecast</h1>
+          @if (locationName()) {
+            <span class="page-subtitle">{{ locationName() }}</span>
+          }
+        </div>
       </div>
 
       @if (loading()) {
@@ -84,7 +90,9 @@ import { getUvCategory } from '../../core/utils/uv.utils';
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
     .back-link:hover { color: var(--accent-gold); }
+    .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
+    .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .day-detail { display: flex; flex-direction: column; gap: var(--space-md); }
     .day-header { display: flex; align-items: center; gap: var(--space-md); }
     .day-header-text { display: flex; flex-direction: column; }
@@ -102,6 +110,7 @@ import { getUvCategory } from '../../core/utils/uv.utils';
 })
 export class DailyForecastComponent {
   private readonly locationService = inject(LocationService);
+  readonly locationName = computed(() => this.locationService.active()?.name ?? '');
   private readonly weatherService = inject(WeatherService);
   protected readonly units = inject(UnitPreferencesService);
 

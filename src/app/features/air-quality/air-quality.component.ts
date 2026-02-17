@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, effect, computed } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { LocationService } from '../../core/services/location.service';
@@ -28,7 +29,12 @@ interface PollutantInfo {
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
           Back
         </a>
-        <h1 class="page-title">Air Quality</h1>
+        <div class="page-title-wrap">
+          <h1 class="page-title">Air Quality</h1>
+          @if (locationName()) {
+            <span class="page-subtitle">{{ locationName() }}</span>
+          }
+        </div>
       </div>
 
       @if (loading()) {
@@ -70,7 +76,9 @@ interface PollutantInfo {
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
     .back-link:hover { color: var(--accent-gold); }
+    .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
+    .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .pollutants { display: flex; flex-direction: column; gap: var(--space-md); }
     .pollutant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-md); }
     .pollutant-item {
@@ -94,6 +102,7 @@ interface PollutantInfo {
 })
 export class AirQualityComponent {
   private readonly locationService = inject(LocationService);
+  readonly locationName = computed(() => this.locationService.active()?.name ?? '');
   private readonly aqService = inject(AirQualityService);
 
   readonly loading = signal(true);

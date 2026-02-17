@@ -119,6 +119,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
     .back-link:hover { color: var(--accent-gold); }
+    .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .setting-group { display: flex; flex-direction: column; gap: var(--space-md); }
     .group-title {
