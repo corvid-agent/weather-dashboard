@@ -65,7 +65,7 @@ import { formatHour } from '../../core/utils/date.utils';
     .page { padding-top: var(--space-xl); padding-bottom: var(--space-2xl); display: flex; flex-direction: column; gap: var(--space-xl); }
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
-    .back-link:hover { color: var(--accent-blue); }
+    .back-link:hover { color: var(--accent-gold); }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .hourly-table { padding: 0; overflow-x: auto; }
     .table-header, .table-row {
@@ -85,8 +85,8 @@ import { formatHour } from '../../core/utils/date.utils';
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: var(--glass-bg);
-      backdrop-filter: blur(var(--glass-blur));
+      background: var(--bg-raised);
+      backdrop-filter: blur(12px);
     }
     .table-row { border-bottom: 1px solid var(--border); }
     .table-row:last-child { border-bottom: none; }

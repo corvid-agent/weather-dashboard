@@ -28,7 +28,7 @@ import { getTemperatureColor } from '../../core/utils/gradient.utils';
           <!-- Temperature points & labels -->
           @for (pt of points(); track pt.index; let i = $index) {
             @if (i % labelEvery() === 0) {
-              <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="3.5" [attr.fill]="pt.color" stroke="var(--bg-base)" stroke-width="1.5"/>
+              <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="3.5" [attr.fill]="pt.color" stroke="var(--bg-deep)" stroke-width="1.5"/>
               <text [attr.x]="pt.x" [attr.y]="pt.y - 12" text-anchor="middle" fill="var(--text-primary)" font-size="11" font-weight="600">{{ pt.label }}</text>
               <text [attr.x]="pt.x" [attr.y]="svgHeight - 6" text-anchor="middle" fill="var(--text-tertiary)" font-size="10">{{ pt.time }}</text>
             }

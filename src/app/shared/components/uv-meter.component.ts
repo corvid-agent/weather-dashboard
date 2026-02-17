@@ -64,7 +64,7 @@ import { getUvCategory, getUvPercent } from '../../core/utils/uv.utils';
       height: 14px;
       background: var(--text-primary);
       border-radius: 50%;
-      border: 2px solid var(--bg-base);
+      border: 2px solid var(--bg-deep);
       transform: translateX(-50%);
       transition: left 0.3s ease;
     }

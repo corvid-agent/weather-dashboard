@@ -43,7 +43,7 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
       @if (showResults()) {
         <div class="search-results" role="listbox">
           <button class="result-item locate-btn" (click)="useMyLocation()" role="option">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent-gold)" stroke-width="2">
               <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
             </svg>
             <span class="result-text">
@@ -64,6 +64,9 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
                 <span class="result-detail">{{ result.admin1 ? result.admin1 + ', ' : '' }}{{ result.country }}</span>
               </span>
             </button>
+          }
+          @if (locateError()) {
+            <div class="result-error">{{ locateError() }}</div>
           }
           @if (!loading() && results().length === 0 && query().length >= 2) {
             <div class="result-empty">No cities found</div>
@@ -90,7 +93,7 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
     }
     .search-container.open .search-input-wrap,
     .search-input-wrap:focus-within {
-      border-color: var(--accent-blue);
+      border-color: var(--accent-gold);
       box-shadow: var(--shadow-glow);
     }
     .search-icon { color: var(--text-tertiary); flex-shrink: 0; }
@@ -139,10 +142,16 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
     }
     .result-item:hover { background: var(--bg-hover); }
     .result-item svg { flex-shrink: 0; color: var(--text-tertiary); }
-    .locate-btn svg { color: var(--accent-blue); }
+    .locate-btn svg { color: var(--accent-gold); }
     .result-text { display: flex; flex-direction: column; min-width: 0; }
     .result-name { font-weight: 500; font-size: 0.95rem; }
     .result-detail { font-size: 0.8rem; color: var(--text-tertiary); }
+    .result-error {
+      padding: var(--space-md);
+      text-align: center;
+      color: var(--color-error);
+      font-size: 0.85rem;
+    }
     .result-loading, .result-empty {
       padding: var(--space-lg);
       text-align: center;
@@ -163,6 +172,7 @@ export class LocationSearchComponent implements OnInit, OnDestroy {
   readonly results = signal<GeocodingResult[]>([]);
   readonly loading = signal(false);
   readonly showResults = signal(false);
+  readonly locateError = signal('');
 
   private readonly search$ = new Subject<string>();
   private readonly destroy$ = new Subject<void>();
@@ -239,27 +249,18 @@ export class LocationSearchComponent implements OnInit, OnDestroy {
   async useMyLocation(): Promise<void> {
     try {
       this.loading.set(true);
+      this.locateError.set('');
       const pos = await this.geolocation.getCurrentPosition();
-      this.geocoding.search(pos.latitude.toFixed(2) + ' ' + pos.longitude.toFixed(2), 1).subscribe(results => {
-        if (results.length > 0) {
-          this.selectResult(results[0]);
-        } else {
-          const loc: GeoLocation = {
-            name: 'Current Location',
-            latitude: pos.latitude,
-            longitude: pos.longitude,
-            country: '',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          };
-          this.locationService.setActive(loc);
-          this.locationSelected.emit(loc);
-          this.query.set('Current Location');
-        }
+      this.geocoding.reverseGeocode(pos.latitude, pos.longitude).subscribe(loc => {
+        this.locationService.setActive(loc);
+        this.locationSelected.emit(loc);
+        this.query.set(loc.name);
         this.loading.set(false);
         this.close();
       });
-    } catch {
+    } catch (err) {
       this.loading.set(false);
+      this.locateError.set(err instanceof Error ? err.message : 'Location access denied');
     }
   }
 

@@ -110,7 +110,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
         <h3 class="group-title">About</h3>
         <p class="about-text">Weather Dashboard v1.0.0</p>
         <p class="about-text">Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> — free weather API, no key required.</p>
-        <p class="about-text">Built with Angular 21 &amp; glassmorphism design.</p>
+        <p class="about-text">Built with Angular 21.</p>
       </div>
     </div>
   `,
@@ -118,7 +118,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     .page { padding-top: var(--space-xl); padding-bottom: var(--space-2xl); display: flex; flex-direction: column; gap: var(--space-lg); }
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
-    .back-link:hover { color: var(--accent-blue); }
+    .back-link:hover { color: var(--accent-gold); }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .setting-group { display: flex; flex-direction: column; gap: var(--space-md); }
     .group-title {
@@ -156,8 +156,8 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     }
     .toggle-btn:last-child { border-right: none; }
     .toggle-btn.active {
-      background: var(--accent-blue-dim);
-      color: var(--accent-blue);
+      background: var(--accent-gold-dim);
+      color: var(--accent-gold);
       font-weight: 600;
     }
     .toggle-btn:hover:not(.active) { background: var(--bg-hover); }
@@ -177,7 +177,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     .clear-btn { margin-top: var(--space-sm); align-self: flex-start; }
     .about-section { display: flex; flex-direction: column; gap: var(--space-sm); }
     .about-text { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.5; }
-    .about-text a { color: var(--accent-blue); }
+    .about-text a { color: var(--accent-gold); }
   `],
 })
 export class SettingsComponent {

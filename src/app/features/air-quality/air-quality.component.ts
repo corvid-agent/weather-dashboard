@@ -69,7 +69,7 @@ interface PollutantInfo {
     .page { padding-top: var(--space-xl); padding-bottom: var(--space-2xl); display: flex; flex-direction: column; gap: var(--space-xl); }
     .page-header { display: flex; align-items: center; gap: var(--space-md); }
     .back-link { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-secondary); font-size: 0.9rem; }
-    .back-link:hover { color: var(--accent-blue); }
+    .back-link:hover { color: var(--accent-gold); }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .pollutants { display: flex; flex-direction: column; gap: var(--space-md); }
     .pollutant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-md); }

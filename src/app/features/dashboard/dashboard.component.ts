@@ -39,9 +39,9 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
         <div class="welcome fade-in">
           <div class="welcome-icon">
             <svg viewBox="0 0 64 64" width="80" height="80" fill="none">
-              <circle cx="32" cy="28" r="12" fill="#fbbf24" opacity="0.9"/>
-              <ellipse cx="36" cy="44" rx="20" ry="12" fill="#94a3b8" opacity="0.7"/>
-              <ellipse cx="28" cy="40" rx="14" ry="10" fill="#cbd5e1" opacity="0.8"/>
+              <circle cx="32" cy="28" r="12" fill="var(--accent-gold)" opacity="0.9"/>
+              <ellipse cx="36" cy="44" rx="20" ry="12" fill="var(--text-tertiary)" opacity="0.5"/>
+              <ellipse cx="28" cy="40" rx="14" ry="10" fill="var(--text-secondary)" opacity="0.4"/>
             </svg>
           </div>
           <h1 class="welcome-title">Weather Dashboard</h1>
@@ -70,6 +70,21 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
 
       @if (state() === 'loaded' && forecast()) {
         <div class="loaded-content slide-up">
+          <!-- Location header -->
+          <div class="location-bar">
+            <div class="location-info">
+              <h2 class="location-name">{{ locationName() }}</h2>
+              <span class="location-detail">{{ locationDetail() }}</span>
+            </div>
+            <button class="btn-icon fav-btn" (click)="toggleFavorite()" [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'">
+              @if (isFavorite()) {
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--text-tertiary)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              }
+            </button>
+          </div>
+
           <app-current-conditions [current]="forecast()!.current" />
 
           <section class="section">
@@ -131,9 +146,14 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       gap: var(--space-lg);
     }
     .welcome-title {
+      font-family: var(--font-heading);
       font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: -1px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .welcome-text {
       color: var(--text-secondary);
@@ -152,6 +172,31 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       flex-direction: column;
       gap: var(--space-xl);
     }
+    .location-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-md);
+    }
+    .location-info { display: flex; flex-direction: column; gap: 2px; }
+    .location-name {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .location-detail {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+    }
+    .fav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      transition: transform 0.2s;
+    }
+    .fav-btn:hover { transform: scale(1.15); }
+    .fav-btn:active { transform: scale(0.95); }
     .section {
       display: flex;
       flex-direction: column;
@@ -166,6 +211,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     @media (max-width: 640px) {
       .dashboard { padding: var(--space-md); }
       .welcome-title { font-size: 1.8rem; }
+      .location-name { font-size: 1.3rem; }
     }
   `],
 })
@@ -181,6 +227,25 @@ export class DashboardComponent {
   readonly forecast = signal<ForecastResponse | null>(null);
   readonly airQuality = signal<AirQualityResponse | null>(null);
   readonly historicalData = signal<HistoricalComparison[]>([]);
+
+  readonly locationName = computed(() => this.locationService.active()?.name ?? '');
+  readonly locationDetail = computed(() => {
+    const loc = this.locationService.active();
+    if (!loc) return '';
+    const parts: string[] = [];
+    if (loc.admin1) parts.push(loc.admin1);
+    if (loc.country) parts.push(loc.country);
+    return parts.join(', ');
+  });
+
+  readonly isFavorite = computed(() => {
+    const loc = this.locationService.active();
+    if (!loc) return false;
+    // Access favorites signal to make this reactive
+    return this.locationService.favorites().some(
+      f => f.latitude === loc.latitude && f.longitude === loc.longitude
+    );
+  });
 
   readonly hourlyForecasts = computed(() => {
     const f = this.forecast();
@@ -212,6 +277,11 @@ export class DashboardComponent {
       const bg = this.bgGradient();
       document.querySelector('.weather-bg')?.setAttribute('style', 'background: ' + bg);
     });
+  }
+
+  toggleFavorite(): void {
+    const loc = this.locationService.active();
+    if (loc) this.locationService.toggleFavorite(loc);
   }
 
   reload(): void {

@@ -62,8 +62,9 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
     }
     .hero-temp { display: flex; flex-direction: column; }
     .temp-value {
+      font-family: var(--font-heading);
       font-size: 4rem;
-      font-weight: 800;
+      font-weight: 700;
       line-height: 1;
       letter-spacing: -2px;
     }
