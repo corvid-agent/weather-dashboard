@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { LocationService } from '../../core/services/location.service';
 import { WeatherService } from '../../core/services/weather.service';
 import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
-import { ForecastResponse, HourlyForecast } from '../../core/models/weather.model';
+import { HourlyForecast } from '../../core/models/weather.model';
 import { HourlyChartComponent } from '../../shared/components/hourly-chart.component';
 import { WeatherIconComponent } from '../../shared/components/weather-icon.component';
 import { TemperaturePipe } from '../../shared/pipes/temperature.pipe';
@@ -49,6 +49,7 @@ import { formatHour } from '../../core/utils/date.utils';
             <span>Temp</span>
             <span>Feels</span>
             <span>Precip</span>
+            <span>Rain</span>
             <span>Wind</span>
             <span>Hum</span>
           </div>
@@ -59,6 +60,7 @@ import { formatHour } from '../../core/utils/date.utils';
               <span class="temp-col">{{ h.temperature | temperature:units.temperatureSymbol() }}</span>
               <span class="feels-col">{{ h.feelsLike | temperature:units.temperatureSymbol() }}</span>
               <span class="precip-col">{{ h.precipProbability }}%</span>
+              <span class="rain-col">{{ formatPrecip(h.precipitation) }}</span>
               <span class="wind-col">{{ h.windSpeed | windSpeed:units.windSpeedSymbol() }} {{ h.windDirection | windDirection }}</span>
               <span class="hum-col">{{ h.humidity }}%</span>
             </div>
@@ -78,7 +80,7 @@ import { formatHour } from '../../core/utils/date.utils';
     .hourly-table { padding: 0; overflow-x: auto; }
     .table-header, .table-row {
       display: grid;
-      grid-template-columns: 70px 40px 70px 70px 60px 120px 50px;
+      grid-template-columns: 70px 40px 70px 70px 55px 55px 110px 50px;
       gap: var(--space-sm);
       padding: var(--space-sm) var(--space-md);
       align-items: center;
@@ -101,9 +103,10 @@ import { formatHour } from '../../core/utils/date.utils';
     .time-col { font-weight: 600; }
     .temp-col { font-weight: 600; }
     .precip-col { color: var(--accent-blue); }
+    .rain-col { font-size: 0.8rem; color: var(--text-secondary); }
     .night-row { background: rgba(0, 0, 0, 0.15); }
     @media (max-width: 640px) {
-      .table-header, .table-row { grid-template-columns: 60px 32px 55px 55px 50px 90px 45px; font-size: 0.78rem; padding: var(--space-xs) var(--space-sm); }
+      .table-header, .table-row { grid-template-columns: 55px 30px 52px 52px 45px 45px 80px 40px; font-size: 0.75rem; padding: var(--space-xs) var(--space-sm); }
     }
   `],
 })
@@ -123,6 +126,14 @@ export class HourlyForecastComponent implements OnInit {
   readonly hours = signal<HourlyForecast[]>([]);
 
   readonly formatHour = formatHour;
+
+  formatPrecip(mm: number): string {
+    if (!mm) return '—';
+    if (this.units.precipitationUnit() === 'inch') {
+      return (mm / 25.4).toFixed(2) + '"';
+    }
+    return mm.toFixed(1) + '';
+  }
 
   constructor() {
     effect(() => {

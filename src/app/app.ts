@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, computed } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject, OnInit, computed, signal } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
 import { LocationService } from './core/services/location.service';
 import { LocationSearchComponent } from './shared/components/location-search.component';
@@ -13,6 +13,10 @@ import { LocationSearchComponent } from './shared/components/location-search.com
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <div class="weather-bg"></div>
+
+    @if (navigating()) {
+      <div class="nav-progress" aria-hidden="true"></div>
+    }
 
     <header class="app-header">
       <div class="header-inner">
@@ -91,6 +95,21 @@ import { LocationSearchComponent } from './shared/components/location-search.com
     </nav>
   `,
   styles: [`
+    .nav-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 100;
+      background: var(--accent-gold);
+      animation: progressSlide 1.5s ease-in-out infinite;
+    }
+    @keyframes progressSlide {
+      0% { transform: scaleX(0); transform-origin: left; }
+      50% { transform: scaleX(0.7); transform-origin: left; }
+      100% { transform: scaleX(1); transform-origin: left; opacity: 0; }
+    }
     .app-header {
       position: sticky;
       top: 0;
@@ -202,10 +221,20 @@ import { LocationSearchComponent } from './shared/components/location-search.com
 export class App implements OnInit {
   protected readonly theme = inject(ThemeService);
   private readonly locationService = inject(LocationService);
+  private readonly router = inject(Router);
 
   readonly hasLocation = computed(() => this.locationService.hasLocation());
+  readonly navigating = signal(false);
 
   ngOnInit(): void {
     this.theme.init();
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.navigating.set(true);
+      } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.navigating.set(false);
+      }
+    });
   }
 }

@@ -44,14 +44,20 @@ import { GeoLocation } from '../../core/models/geocoding.model';
       <div class="glass-card setting-group">
         <h3 class="group-title">Units</h3>
         <div class="setting-row">
-          <span class="setting-label">Temperature</span>
+          <div class="setting-info">
+            <span class="setting-label">Temperature</span>
+            <span class="setting-preview">{{ previewTemp() }}</span>
+          </div>
           <div class="toggle-group">
             <button class="toggle-btn" [class.active]="units.temperatureUnit() === 'celsius'" (click)="units.setTemperature('celsius')">°C</button>
             <button class="toggle-btn" [class.active]="units.temperatureUnit() === 'fahrenheit'" (click)="units.setTemperature('fahrenheit')">°F</button>
           </div>
         </div>
         <div class="setting-row">
-          <span class="setting-label">Wind Speed</span>
+          <div class="setting-info">
+            <span class="setting-label">Wind Speed</span>
+            <span class="setting-preview">{{ previewWind() }}</span>
+          </div>
           <div class="toggle-group">
             <button class="toggle-btn" [class.active]="units.windSpeedUnit() === 'kmh'" (click)="units.setWindSpeed('kmh')">km/h</button>
             <button class="toggle-btn" [class.active]="units.windSpeedUnit() === 'mph'" (click)="units.setWindSpeed('mph')">mph</button>
@@ -60,7 +66,10 @@ import { GeoLocation } from '../../core/models/geocoding.model';
           </div>
         </div>
         <div class="setting-row">
-          <span class="setting-label">Precipitation</span>
+          <div class="setting-info">
+            <span class="setting-label">Precipitation</span>
+            <span class="setting-preview">{{ previewPrecip() }}</span>
+          </div>
           <div class="toggle-group">
             <button class="toggle-btn" [class.active]="units.precipitationUnit() === 'mm'" (click)="units.setPrecipitation('mm')">mm</button>
             <button class="toggle-btn" [class.active]="units.precipitationUnit() === 'inch'" (click)="units.setPrecipitation('inch')">in</button>
@@ -108,7 +117,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
 
       <div class="glass-card about-section">
         <h3 class="group-title">About</h3>
-        <p class="about-text">Weather Dashboard v1.0.0</p>
+        <p class="about-text">Weather Dashboard v1.3.0</p>
         <p class="about-text">Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> — free weather API, no key required.</p>
         <p class="about-text">Built with Angular 21.</p>
       </div>
@@ -136,7 +145,9 @@ import { GeoLocation } from '../../core/models/geocoding.model';
       justify-content: space-between;
       gap: var(--space-md);
     }
+    .setting-info { display: flex; flex-direction: column; gap: 2px; }
     .setting-label { font-size: 0.95rem; font-weight: 500; }
+    .setting-preview { font-size: 0.75rem; color: var(--text-tertiary); font-style: italic; }
     .toggle-group {
       display: flex;
       background: var(--bg-surface);
@@ -185,6 +196,38 @@ export class SettingsComponent {
   protected readonly units = inject(UnitPreferencesService);
   protected readonly theme = inject(ThemeService);
   protected readonly locationService = inject(LocationService);
+
+  /** Live preview: 22°C in user's selected unit */
+  readonly previewTemp = computed(() => {
+    const c = 22; // comfortable reference temp
+    if (this.units.temperatureUnit() === 'fahrenheit') {
+      return Math.round(c * 9 / 5 + 32) + '°F';
+    }
+    return c + '°C';
+  });
+
+  /** Live preview: 15 km/h in user's selected unit */
+  readonly previewWind = computed(() => {
+    const kmh = 15;
+    const unit = this.units.windSpeedUnit();
+    const map: Record<string, [number, string]> = {
+      kmh: [kmh, 'km/h'],
+      mph: [kmh * 0.621371, 'mph'],
+      ms: [kmh / 3.6, 'm/s'],
+      kn: [kmh * 0.539957, 'kn'],
+    };
+    const [val, label] = map[unit] ?? [kmh, 'km/h'];
+    return Math.round(val) + ' ' + label;
+  });
+
+  /** Live preview: 5mm in user's selected unit */
+  readonly previewPrecip = computed(() => {
+    const mm = 5;
+    if (this.units.precipitationUnit() === 'inch') {
+      return (mm / 25.4).toFixed(2) + ' in';
+    }
+    return mm + ' mm';
+  });
 
   selectLocation(loc: GeoLocation): void {
     this.locationService.setActive(loc);

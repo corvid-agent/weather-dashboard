@@ -12,11 +12,20 @@ export interface UnitPreferences {
 
 const STORAGE_KEY = 'weather-units';
 
-const DEFAULT_PREFS: UnitPreferences = {
-  temperature: 'celsius',
-  windSpeed: 'kmh',
-  precipitation: 'mm',
-};
+/** Countries that primarily use Fahrenheit / mph / inches */
+const IMPERIAL_LOCALES = ['en-US', 'en-us'];
+
+function detectDefaults(): UnitPreferences {
+  try {
+    const locale = navigator.language || '';
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const isUS = IMPERIAL_LOCALES.includes(locale) || tz.startsWith('America/') || tz.startsWith('US/');
+    if (isUS) {
+      return { temperature: 'fahrenheit', windSpeed: 'mph', precipitation: 'inch' };
+    }
+  } catch { /* noop */ }
+  return { temperature: 'celsius', windSpeed: 'kmh', precipitation: 'mm' };
+}
 
 @Injectable({ providedIn: 'root' })
 export class UnitPreferencesService {
@@ -52,11 +61,12 @@ export class UnitPreferencesService {
   }
 
   private load(): UnitPreferences {
+    const defaults = detectDefaults();
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
+      if (raw) return { ...defaults, ...JSON.parse(raw) };
     } catch { /* noop */ }
-    return { ...DEFAULT_PREFS };
+    return defaults;
   }
 
   private save(prefs: UnitPreferences): void {

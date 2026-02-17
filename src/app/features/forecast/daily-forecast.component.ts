@@ -56,6 +56,10 @@ import { getUvCategory } from '../../core/utils/uv.utils';
             </div>
             <div class="day-metrics">
               <div class="metric">
+                <span class="metric-label">Feels Like</span>
+                <span class="metric-value">{{ day.feelsLikeMax | temperature:units.temperatureSymbol() }} / {{ day.feelsLikeMin | temperature:units.temperatureSymbol() }}</span>
+              </div>
+              <div class="metric">
                 <span class="metric-label">Precip</span>
                 <span class="metric-value">{{ formatPrecip(day.precipSum) }} ({{ day.precipProbabilityMax }}%)</span>
               </div>
