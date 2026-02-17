@@ -5,6 +5,7 @@ import { WeatherService } from '../../core/services/weather.service';
 import { AirQualityService } from '../../core/services/air-quality.service';
 import { HistoricalService, HistoricalComparison } from '../../core/services/historical.service';
 import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
+import { GeoLocation } from '../../core/models/geocoding.model';
 import { ForecastResponse, HourlyForecast, DailyForecast } from '../../core/models/weather.model';
 import { AirQualityResponse } from '../../core/models/air-quality.model';
 import { LocationSearchComponent } from '../../shared/components/location-search.component';
@@ -49,6 +50,19 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           <div class="welcome-search">
             <app-location-search />
           </div>
+          @if (recentLocations().length > 0) {
+            <div class="welcome-recents">
+              <span class="recents-label">Recent</span>
+              <div class="recents-chips">
+                @for (loc of recentLocations(); track loc.latitude + ',' + loc.longitude) {
+                  <button class="recent-chip" (click)="goToLocation(loc)">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    {{ loc.name }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
         </div>
       }
 
@@ -74,15 +88,27 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           <div class="location-bar">
             <div class="location-info">
               <h2 class="location-name">{{ locationName() }}</h2>
-              <span class="location-detail">{{ locationDetail() }}</span>
+              <span class="location-detail">
+                {{ locationDetail() }}
+                @if (lastUpdated()) {
+                  <span class="updated-time">Updated {{ formatUpdated(lastUpdated()!) }}</span>
+                }
+              </span>
             </div>
-            <button class="btn-icon fav-btn" (click)="toggleFavorite()" [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'">
-              @if (isFavorite()) {
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              } @else {
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--text-tertiary)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              }
-            </button>
+            <div class="location-actions">
+              <button class="btn-icon refresh-btn" (click)="reload()" aria-label="Refresh weather data" [class.spinning]="state() === 'loading'">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                </svg>
+              </button>
+              <button class="btn-icon fav-btn" (click)="toggleFavorite()" [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'">
+                @if (isFavorite()) {
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="var(--accent-gold)" stroke="var(--accent-gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                } @else {
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--text-tertiary)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                }
+              </button>
+            </div>
           </div>
 
           <app-current-conditions [current]="forecast()!.current" />
@@ -161,6 +187,43 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       max-width: 400px;
     }
     .welcome-search { width: 100%; max-width: 400px; }
+    .welcome-recents {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .recents-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+    .recents-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+    }
+    .recent-chip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .recent-chip:hover {
+      background: var(--accent-gold-dim);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
     .loading-grid {
       display: flex;
       flex-direction: column;
@@ -189,6 +252,21 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       font-size: 0.85rem;
       color: var(--text-tertiary);
     }
+    .location-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .refresh-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      color: var(--text-tertiary);
+      transition: color 0.2s;
+    }
+    .refresh-btn:hover { color: var(--text-primary); }
+    .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .fav-btn {
       width: 44px;
       height: 44px;
@@ -197,6 +275,8 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     }
     .fav-btn:hover { transform: scale(1.15); }
     .fav-btn:active { transform: scale(0.95); }
+    .updated-time { margin-left: 6px; }
+    .updated-time::before { content: '\\00B7'; margin-right: 6px; }
     .section {
       display: flex;
       flex-direction: column;
@@ -227,6 +307,7 @@ export class DashboardComponent {
   readonly forecast = signal<ForecastResponse | null>(null);
   readonly airQuality = signal<AirQualityResponse | null>(null);
   readonly historicalData = signal<HistoricalComparison[]>([]);
+  readonly lastUpdated = signal<Date | null>(null);
 
   readonly locationName = computed(() => this.locationService.active()?.name ?? '');
   readonly locationDetail = computed(() => {
@@ -237,6 +318,8 @@ export class DashboardComponent {
     if (loc.country) parts.push(loc.country);
     return parts.join(', ');
   });
+
+  readonly recentLocations = computed(() => this.locationService.recents().slice(0, 5));
 
   readonly isFavorite = computed(() => {
     const loc = this.locationService.active();
@@ -279,6 +362,18 @@ export class DashboardComponent {
     });
   }
 
+  goToLocation(loc: GeoLocation): void {
+    this.locationService.setActive(loc);
+  }
+
+  formatUpdated(date: Date): string {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
   toggleFavorite(): void {
     const loc = this.locationService.active();
     if (loc) this.locationService.toggleFavorite(loc);
@@ -298,6 +393,7 @@ export class DashboardComponent {
       next: res => {
         this.forecast.set(res);
         this.state.set('loaded');
+        this.lastUpdated.set(new Date());
       },
       error: () => this.state.set('error'),
     });

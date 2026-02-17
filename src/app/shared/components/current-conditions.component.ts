@@ -46,8 +46,8 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
           <span class="detail-value">{{ current().cloud_cover }}%</span>
         </div>
         <div class="detail-item">
-          <span class="detail-label">Precipitation</span>
-          <span class="detail-value">{{ current().precipitation }} {{ units.precipitationSymbol() }}</span>
+          <span class="detail-label">Dew Point</span>
+          <span class="detail-value">{{ current().dew_point_2m | temperature:units.temperatureSymbol() }}</span>
         </div>
       </div>
     </div>
