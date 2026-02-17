@@ -13,8 +13,8 @@ import { getTemperatureColor } from '../../core/utils/gradient.utils';
       <div class="chart-header">
         <h3 class="chart-title">48-Hour Temperature</h3>
       </div>
-      <div class="chart-scroll">
-        <svg [attr.viewBox]="'0 0 ' + svgWidth() + ' ' + svgHeight" preserveAspectRatio="none" class="chart-svg">
+      <div class="chart-scroll" role="img" aria-label="Temperature trend chart showing hourly temperatures">
+        <svg [attr.viewBox]="'0 0 ' + svgWidth() + ' ' + svgHeight" preserveAspectRatio="none" class="chart-svg" aria-hidden="true">
           <!-- Temperature area -->
           <defs>
             <linearGradient id="tempGrad" x1="0" y1="0" x2="0" y2="1">

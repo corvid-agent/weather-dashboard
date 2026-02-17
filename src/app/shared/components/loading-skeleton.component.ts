@@ -5,7 +5,9 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="skeleton" [style.height]="height()" [style.width]="width()" [style.border-radius]="radius()"></div>
+    <div class="skeleton" [style.height]="height()" [style.width]="width()" [style.border-radius]="radius()" role="status" aria-label="Loading">
+      <span class="sr-only">Loading...</span>
+    </div>
   `,
   styles: [`
     .skeleton {

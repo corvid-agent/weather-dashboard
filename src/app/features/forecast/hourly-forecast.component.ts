@@ -42,29 +42,35 @@ import { formatHour } from '../../core/utils/date.utils';
       } @else if (hours().length) {
         <app-hourly-chart [hours]="hours()" />
 
-        <div class="hourly-table glass-card">
-          <div class="table-header">
-            <span>Time</span>
-            <span></span>
-            <span>Temp</span>
-            <span>Feels</span>
-            <span>Precip</span>
-            <span>Rain</span>
-            <span>Wind</span>
-            <span>Hum</span>
-          </div>
-          @for (h of hours(); track h.time.getTime()) {
-            <div class="table-row" [class.night-row]="!h.isDay">
-              <span class="time-col">{{ formatHour(h.time) }}</span>
-              <span class="icon-col"><app-weather-icon [code]="h.weatherCode" [isDay]="h.isDay" [size]="24" /></span>
-              <span class="temp-col">{{ h.temperature | temperature:units.temperatureSymbol() }}</span>
-              <span class="feels-col">{{ h.feelsLike | temperature:units.temperatureSymbol() }}</span>
-              <span class="precip-col">{{ h.precipProbability }}%</span>
-              <span class="rain-col">{{ formatPrecip(h.precipitation) }}</span>
-              <span class="wind-col">{{ h.windSpeed | windSpeed:units.windSpeedSymbol() }} {{ h.windDirection | windDirection }}</span>
-              <span class="hum-col">{{ h.humidity }}%</span>
-            </div>
-          }
+        <div class="hourly-table glass-card" role="region" aria-label="Hourly forecast data" tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col" aria-label="Condition"></th>
+                <th scope="col">Temp</th>
+                <th scope="col">Feels</th>
+                <th scope="col">Precip</th>
+                <th scope="col">Rain</th>
+                <th scope="col">Wind</th>
+                <th scope="col">Hum</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of hours(); track h.time.getTime()) {
+                <tr [class.night-row]="!h.isDay">
+                  <td class="time-col">{{ formatHour(h.time) }}</td>
+                  <td class="icon-col"><app-weather-icon [code]="h.weatherCode" [isDay]="h.isDay" [size]="24" /></td>
+                  <td class="temp-col">{{ h.temperature | temperature:units.temperatureSymbol() }}</td>
+                  <td class="feels-col">{{ h.feelsLike | temperature:units.temperatureSymbol() }}</td>
+                  <td class="precip-col">{{ h.precipProbability }}%</td>
+                  <td class="rain-col">{{ formatPrecip(h.precipitation) }}</td>
+                  <td class="wind-col">{{ h.windSpeed | windSpeed:units.windSpeedSymbol() }} {{ h.windDirection | windDirection }}</td>
+                  <td class="hum-col">{{ h.humidity }}%</td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
       }
     </div>
@@ -78,15 +84,13 @@ import { formatHour } from '../../core/utils/date.utils';
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .hourly-table { padding: 0; overflow-x: auto; }
-    .table-header, .table-row {
-      display: grid;
-      grid-template-columns: 70px 40px 70px 70px 55px 55px 110px 50px;
-      gap: var(--space-sm);
-      padding: var(--space-sm) var(--space-md);
-      align-items: center;
-      font-size: 0.85rem;
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td {
+      padding: var(--space-sm) var(--space-sm);
+      text-align: left;
+      white-space: nowrap;
     }
-    .table-header {
+    thead tr {
       font-weight: 600;
       color: var(--text-tertiary);
       text-transform: uppercase;
@@ -98,15 +102,15 @@ import { formatHour } from '../../core/utils/date.utils';
       background: var(--bg-raised);
       backdrop-filter: blur(12px);
     }
-    .table-row { border-bottom: 1px solid var(--border); }
-    .table-row:last-child { border-bottom: none; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
     .time-col { font-weight: 600; }
     .temp-col { font-weight: 600; }
     .precip-col { color: var(--accent-blue); }
     .rain-col { font-size: 0.8rem; color: var(--text-secondary); }
     .night-row { background: rgba(0, 0, 0, 0.15); }
     @media (max-width: 640px) {
-      .table-header, .table-row { grid-template-columns: 55px 30px 52px 52px 45px 45px 80px 40px; font-size: 0.75rem; padding: var(--space-xs) var(--space-sm); }
+      th, td { padding: var(--space-xs) var(--space-xs); font-size: 0.75rem; }
     }
   `],
 })

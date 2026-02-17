@@ -14,7 +14,7 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
   template: `
     <div class="search-container" [class.open]="showResults()">
       <div class="search-input-wrap">
-        <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <input
@@ -28,6 +28,10 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
           (keydown.escape)="close()"
           (keydown.arrowDown)="onArrowDown($event)"
           aria-label="Search for a city"
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          aria-controls="search-results-list"
           [attr.aria-expanded]="showResults()"
           autocomplete="off"
         />
@@ -41,7 +45,7 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
       </div>
 
       @if (showResults()) {
-        <div class="search-results" role="listbox">
+        <div class="search-results" role="listbox" id="search-results-list" aria-label="Search results">
           <button class="result-item locate-btn" (click)="useMyLocation()" role="option">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent-gold)" stroke-width="2">
               <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
@@ -111,8 +115,11 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
     .clear-btn {
       display: flex;
       align-items: center;
+      justify-content: center;
       color: var(--text-tertiary);
-      padding: 2px;
+      padding: var(--space-sm);
+      min-height: 44px;
+      min-width: 44px;
     }
     .clear-btn:hover { color: var(--text-primary); }
     .search-results {
@@ -244,6 +251,7 @@ export class LocationSearchComponent implements OnInit, OnDestroy {
     this.locationSelected.emit(loc);
     this.query.set(result.name);
     this.close();
+    this.searchInput()?.nativeElement.focus();
   }
 
   async useMyLocation(): Promise<void> {

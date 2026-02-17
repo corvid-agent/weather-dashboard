@@ -10,8 +10,8 @@ import { formatHour } from '../../core/utils/date.utils';
   template: `
     <div class="glass-card chart-wrap">
       <h3 class="chart-title">Precipitation</h3>
-      <div class="chart-scroll">
-        <svg [attr.viewBox]="'0 0 ' + svgWidth() + ' 160'" class="chart-svg">
+      <div class="chart-scroll" role="img" aria-label="Precipitation probability and amount chart">
+        <svg [attr.viewBox]="'0 0 ' + svgWidth() + ' 160'" class="chart-svg" aria-hidden="true">
           @for (bar of bars(); track bar.index) {
             @if (bar.index % 3 === 0) {
               <!-- Probability bar -->

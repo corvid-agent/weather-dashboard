@@ -12,7 +12,7 @@ import { degreesToCompass, getBeaufortScale } from '../../core/utils/wind.utils'
     <div class="glass-card compass-card">
       <h3 class="card-label">Wind</h3>
       <div class="compass">
-        <svg viewBox="0 0 120 120" width="120" height="120">
+        <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
           <!-- Compass ring -->
           <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border-bright)" stroke-width="1.5"/>
           <!-- Cardinal marks -->

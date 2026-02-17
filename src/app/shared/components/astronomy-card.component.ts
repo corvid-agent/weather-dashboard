@@ -13,7 +13,7 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
 
       <!-- Sun arc visualization -->
       <div class="sun-arc-wrap">
-        <svg class="sun-arc" viewBox="0 0 200 80" preserveAspectRatio="xMidYMid meet">
+        <svg class="sun-arc" viewBox="0 0 200 80" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <!-- Arc path (semicircle) -->
           <path d="M 20 70 Q 100 -20 180 70" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 3" />
           <!-- Horizon line -->
@@ -32,6 +32,14 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
 
       <div class="daylight-row">
         <div class="daylight">
+          <span class="dl-label">Sunrise</span>
+          <span class="dl-value">{{ sunriseTime() }}</span>
+        </div>
+        <div class="daylight">
+          <span class="dl-label">Sunset</span>
+          <span class="dl-value">{{ sunsetTime() }}</span>
+        </div>
+        <div class="daylight">
           <span class="dl-label">Daylight</span>
           <span class="dl-value">{{ daylightStr() }}</span>
         </div>
@@ -42,7 +50,7 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
       </div>
 
       <div class="moon-section">
-        <span class="moon-emoji">{{ moonInfo().emoji }}</span>
+        <span class="moon-emoji" aria-hidden="true">{{ moonInfo().emoji }}</span>
         <div class="moon-detail">
           <span class="moon-phase">{{ moonInfo().phase }}</span>
           <span class="moon-illum">{{ moonInfo().illumination }}% illuminated</span>

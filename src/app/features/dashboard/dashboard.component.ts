@@ -45,10 +45,17 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard">
+      <div class="sr-only" aria-live="polite" role="status">
+        @switch (state()) {
+          @case ('loading') { Loading weather data... }
+          @case ('loaded') { Weather data for {{ locationName() }} loaded. }
+          @case ('error') { Error loading weather data. }
+        }
+      </div>
       @if (state() === 'idle') {
         <div class="welcome fade-in">
           <div class="welcome-icon">
-            <svg viewBox="0 0 64 64" width="80" height="80" fill="none">
+            <svg viewBox="0 0 64 64" width="80" height="80" fill="none" aria-hidden="true">
               <circle cx="32" cy="28" r="12" fill="var(--accent-gold)" opacity="0.9"/>
               <ellipse cx="36" cy="44" rx="20" ry="12" fill="var(--text-tertiary)" opacity="0.5"/>
               <ellipse cx="28" cy="40" rx="14" ry="10" fill="var(--text-secondary)" opacity="0.4"/>
@@ -65,7 +72,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
               <div class="recents-chips">
                 @for (loc of recentLocations(); track loc.latitude + ',' + loc.longitude) {
                   <button class="recent-chip" (click)="goToLocation(loc)">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     {{ loc.name }}
                   </button>
                 }
@@ -96,7 +103,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           <!-- Location header -->
           <div class="location-bar">
             <div class="location-info">
-              <h2 class="location-name">{{ locationName() }}</h2>
+              <h1 class="location-name">{{ locationName() }}</h1>
               <span class="location-detail">
                 {{ locationDetail() }}
                 @if (lastUpdated()) {
@@ -126,7 +133,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           @if (todayForecast()) {
             <div class="highlights-row">
               <div class="highlight-chip">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-orange)" stroke-width="2">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-orange)" stroke-width="2" aria-hidden="true">
                   <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-5.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-12.73l1.41 1.41m8.73 8.73l1.41 1.41"/>
                   <circle cx="12" cy="12" r="5"/>
                 </svg>
@@ -134,21 +141,21 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
                 <span class="hl-value">{{ todayForecast()!.tempMax | temperature:units.temperatureSymbol() }}</span>
               </div>
               <div class="highlight-chip">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-blue)" stroke-width="2" aria-hidden="true">
                   <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
                 </svg>
                 <span class="hl-label">Low</span>
                 <span class="hl-value">{{ todayForecast()!.tempMin | temperature:units.temperatureSymbol() }}</span>
               </div>
               <div class="highlight-chip">
-                <svg viewBox="0 0 16 16" width="16" height="16" fill="var(--accent-blue)" opacity="0.7">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="var(--accent-blue)" opacity="0.7" aria-hidden="true">
                   <path d="M8 2l4 8a4.5 4.5 0 11-8 0l4-8z"/>
                 </svg>
                 <span class="hl-label">Rain</span>
                 <span class="hl-value">{{ todayForecast()!.precipProbabilityMax }}%</span>
               </div>
               <div class="highlight-chip">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/>
                 </svg>
                 <span class="hl-label">Wind</span>
@@ -299,6 +306,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0;
+      letter-spacing: -0.01em;
     }
     .location-detail {
       font-size: 0.85rem;

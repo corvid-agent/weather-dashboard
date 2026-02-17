@@ -26,13 +26,13 @@ import { GeoLocation } from '../../core/models/geocoding.model';
           <span class="setting-label">Appearance</span>
           <div class="toggle-group">
             <button class="toggle-btn" [class.active]="theme.theme() === 'dark'" (click)="theme.toggle()">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
               </svg>
               Dark
             </button>
             <button class="toggle-btn" [class.active]="theme.theme() === 'light'" (click)="theme.toggle()">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2m11-11h-2M4 12H2m15.07-5.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-12.73l1.41 1.41m8.73 8.73l1.41 1.41"/>
               </svg>
               Light
@@ -105,10 +105,10 @@ import { GeoLocation } from '../../core/models/geocoding.model';
         } @else {
           @for (r of locationService.recents(); track r.latitude + ',' + r.longitude) {
             <div class="fav-row">
-              <div class="fav-info" (click)="selectLocation(r)">
+              <button class="fav-info" (click)="selectLocation(r)">
                 <span class="fav-name">{{ r.name }}</span>
                 <span class="fav-detail">{{ r.admin1 ? r.admin1 + ', ' : '' }}{{ r.country }}</span>
-              </div>
+              </button>
             </div>
           }
           <button class="btn-secondary clear-btn" (click)="locationService.clearRecents()">Clear Recents</button>
@@ -118,7 +118,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
       <div class="glass-card about-section">
         <h3 class="group-title">About</h3>
         <p class="about-text">Weather Dashboard v1.3.0</p>
-        <p class="about-text">Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> — free weather API, no key required.</p>
+        <p class="about-text">Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo<span class="sr-only"> (opens in new tab)</span></a> — free weather API, no key required.</p>
         <p class="about-text">Built with Angular 21.</p>
       </div>
     </div>
@@ -182,10 +182,24 @@ import { GeoLocation } from '../../core/models/geocoding.model';
       border-bottom: 1px solid var(--border);
     }
     .fav-row:last-of-type { border-bottom: none; }
-    .fav-info { display: flex; flex-direction: column; cursor: pointer; }
+    .fav-info {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius);
+      color: inherit;
+      min-height: 44px;
+      min-width: auto;
+      justify-content: center;
+    }
+    .fav-info:hover { background: var(--bg-hover); }
     .fav-name { font-weight: 500; font-size: 0.95rem; }
     .fav-detail { font-size: 0.8rem; color: var(--text-tertiary); }
-    .remove-btn { width: 32px; height: 32px; }
+    .remove-btn { width: 44px; height: 44px; }
     .clear-btn { margin-top: var(--space-sm); align-self: flex-start; }
     .about-section { display: flex; flex-direction: column; gap: var(--space-sm); }
     .about-text { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.5; }

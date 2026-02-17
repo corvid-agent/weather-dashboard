@@ -17,7 +17,7 @@
   /* Text */
   --text-primary: #f0ede8;
   --text-secondary: #a8a29e;
-  --text-tertiary: #6b6560;
+  --text-tertiary: #8a8480;
 
   /* Accents */
   --accent-gold: #d4a843;
@@ -120,12 +120,41 @@
   --border-bright: #ccc;
   --text-primary: #1a1a1a;
   --text-secondary: #555;
-  --text-tertiary: #888;
-  --accent-gold: #b8942e;
-  --accent-gold-bright: #a07e1e;
-  --accent-gold-dim: rgba(184, 148, 46, 0.1);
-  --accent-cream: #6b5a2e;
-  --accent-silver: #777;
+  --text-tertiary: #666;
+  --accent-gold: #7a5c0e;
+  --accent-gold-bright: #6b4f08;
+  --accent-gold-dim: rgba(122, 92, 14, 0.1);
+  --accent-cream: #5a4a1e;
+  --accent-silver: #666;
+  --accent-blue: #1d6fcc;
+  --accent-blue-dim: rgba(29, 111, 204, 0.1);
+  --accent-cyan: #0e7d8c;
+  --accent-orange: #b5530d;
+  --accent-yellow: #8c6d00;
+  --accent-red: #b91c1c;
+  --accent-green: #0a7c51;
+  --accent-purple: #6d28d9;
+  --color-success: #15803d;
+  --color-error: #b91c1c;
+  --color-info: #1d6fcc;
+  --temp-freezing: #1d6fcc;
+  --temp-cold: #1a5fb0;
+  --temp-cool: #0e7d8c;
+  --temp-mild: #0a7c51;
+  --temp-warm: #8c6d00;
+  --temp-hot: #b5530d;
+  --temp-extreme: #b91c1c;
+  --aqi-good: #0a7c51;
+  --aqi-moderate: #8c6d00;
+  --aqi-unhealthy-sensitive: #b5530d;
+  --aqi-unhealthy: #b91c1c;
+  --aqi-very-unhealthy: #6d28d9;
+  --aqi-hazardous: #9f1239;
+  --uv-low: #0a7c51;
+  --uv-moderate: #8c6d00;
+  --uv-high: #b5530d;
+  --uv-very-high: #b91c1c;
+  --uv-extreme: #6d28d9;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -306,8 +335,8 @@ button:active {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius);
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -438,8 +467,13 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--accent-gold);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.4);
   outline: none;
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--accent-gold);
+  outline-offset: -1px;
 }
 
 input::placeholder {

@@ -13,7 +13,7 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
     <div class="glass-card comfort-card">
       <h3 class="card-label">What to Wear</h3>
       <div class="comfort-main">
-        <div class="comfort-icon" [class]="'level-' + advice().level">
+        <div class="comfort-icon" [class]="'level-' + advice().level" aria-hidden="true">
           @switch (advice().icon) {
             @case ('bundle') {
               <svg viewBox="0 0 48 48" width="48" height="48" fill="none">

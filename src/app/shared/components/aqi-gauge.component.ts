@@ -9,7 +9,7 @@ import { getAqiCategory } from '../../core/utils/aqi.utils';
     <div class="glass-card aqi-card">
       <h3 class="card-label">Air Quality</h3>
       <div class="gauge-wrap">
-        <svg viewBox="0 0 200 120" width="200" height="120">
+        <svg viewBox="0 0 200 120" width="200" height="120" aria-hidden="true">
           <!-- Background arc segments -->
           <path d="M20,100 A80,80 0 0,1 56,36" fill="none" stroke="var(--aqi-good)" stroke-width="10" stroke-linecap="round"/>
           <path d="M56,36 A80,80 0 0,1 100,20" fill="none" stroke="var(--aqi-moderate)" stroke-width="10" stroke-linecap="round"/>

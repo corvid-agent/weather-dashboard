@@ -9,7 +9,7 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
     <div class="glass-card humidity-card">
       <h3 class="card-label">Humidity</h3>
       <div class="gauge-wrap">
-        <svg viewBox="0 0 120 120" width="120" height="120">
+        <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
           <!-- Background circle -->
           <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="8"
                   stroke-dasharray="235.6" stroke-dashoffset="0"

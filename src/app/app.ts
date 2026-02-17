@@ -60,16 +60,16 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       </div>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <router-outlet />
     </main>
 
     <footer class="app-footer">
-      <p>Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></p>
+      <p>Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo<span class="sr-only"> (opens in new tab)</span></a></p>
       <div class="footer-links">
-        <a href="https://corvid-agent.github.io/" target="_blank" rel="noopener">Home</a>
-        <a href="https://corvid-agent.github.io/space-dashboard/" target="_blank" rel="noopener">Space</a>
-        <a href="https://corvid-agent.github.io/bw-cinema/" target="_blank" rel="noopener">Cinema</a>
+        <a href="https://corvid-agent.github.io/" target="_blank" rel="noopener">Home<span class="sr-only"> (opens in new tab)</span></a>
+        <a href="https://corvid-agent.github.io/space-dashboard/" target="_blank" rel="noopener">Space<span class="sr-only"> (opens in new tab)</span></a>
+        <a href="https://corvid-agent.github.io/bw-cinema/" target="_blank" rel="noopener">Cinema<span class="sr-only"> (opens in new tab)</span></a>
       </div>
     </footer>
 
@@ -157,8 +157,8 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: var(--radius);
       color: var(--text-secondary);
       transition: background 0.2s, color 0.2s;
@@ -169,6 +169,7 @@ import { LocationSearchComponent } from './shared/components/location-search.com
     main {
       min-height: calc(100vh - var(--header-height) - 60px);
       padding-bottom: 0;
+      outline: none;
     }
     .app-footer {
       text-align: center;
@@ -245,6 +246,12 @@ export class App implements OnInit {
         this.navigating.set(true);
       } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
         this.navigating.set(false);
+        if (event instanceof NavigationEnd) {
+          const main = document.getElementById('main-content');
+          if (main) {
+            main.focus({ preventScroll: true });
+          }
+        }
       }
     });
   }
