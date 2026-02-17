@@ -522,16 +522,12 @@ export class DashboardComponent {
           const current = this.forecast();
           if (!current) return;
 
-          const tempUnit = this.units.temperatureSymbol();
-          const windUnit = this.units.windSpeedSymbol();
-          const precipUnit = this.units.precipitationSymbol();
-
           const comparisons: HistoricalComparison[] = [
             {
               metric: 'High Temp',
               current: current.daily.temperature_2m_max[0],
               historical: avgMax,
-              unit: tempUnit,
+              type: 'temperature',
               diff: current.daily.temperature_2m_max[0] - avgMax,
               diffPercent: avgMax ? ((current.daily.temperature_2m_max[0] - avgMax) / Math.abs(avgMax)) * 100 : 0,
             },
@@ -539,7 +535,7 @@ export class DashboardComponent {
               metric: 'Low Temp',
               current: current.daily.temperature_2m_min[0],
               historical: avgMin,
-              unit: tempUnit,
+              type: 'temperature',
               diff: current.daily.temperature_2m_min[0] - avgMin,
               diffPercent: avgMin ? ((current.daily.temperature_2m_min[0] - avgMin) / Math.abs(avgMin)) * 100 : 0,
             },
@@ -547,7 +543,7 @@ export class DashboardComponent {
               metric: 'Precipitation',
               current: current.daily.precipitation_sum[0],
               historical: avgPrecip,
-              unit: precipUnit,
+              type: 'precipitation',
               diff: current.daily.precipitation_sum[0] - avgPrecip,
               diffPercent: avgPrecip ? ((current.daily.precipitation_sum[0] - avgPrecip) / avgPrecip) * 100 : 0,
             },
@@ -555,7 +551,7 @@ export class DashboardComponent {
               metric: 'Wind Speed',
               current: current.daily.wind_speed_10m_max[0],
               historical: avgWind,
-              unit: windUnit,
+              type: 'windSpeed',
               diff: current.daily.wind_speed_10m_max[0] - avgWind,
               diffPercent: avgWind ? ((current.daily.wind_speed_10m_max[0] - avgWind) / avgWind) * 100 : 0,
             },

@@ -5,8 +5,8 @@ export function getBackgroundGradient(weatherCode: number | undefined, isDay: bo
   return getWeatherGradientVar(weatherCode, isDay);
 }
 
-export function getTemperatureColor(temp: number, unit: string): string {
-  const celsius = unit === '°F' ? (temp - 32) * 5 / 9 : temp;
+/** Returns a CSS color variable based on Celsius temperature (data is always in Celsius) */
+export function getTemperatureColor(celsius: number): string {
   if (celsius <= -10) return 'var(--temp-freezing)';
   if (celsius <= 0) return 'var(--temp-cold)';
   if (celsius <= 10) return 'var(--temp-cool)';

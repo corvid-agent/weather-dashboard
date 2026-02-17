@@ -78,17 +78,18 @@ export class HourlyChartComponent {
     const range = max - min || 1;
     const w = this.svgWidth() - this.padding.left - this.padding.right;
     const h = this.svgHeight - this.padding.top - this.padding.bottom;
-    const symbol = this.units.temperatureSymbol();
+    const isFahrenheit = this.units.temperatureUnit() === 'fahrenheit';
     return data.map((hour, i) => {
       const x = this.padding.left + (i / (data.length - 1)) * w;
       const y = this.padding.top + (1 - (hour.temperature - min) / range) * h;
+      const displayTemp = isFahrenheit ? Math.round(hour.temperature * 9 / 5 + 32) : Math.round(hour.temperature);
       return {
         index: i,
         x,
         y,
-        label: Math.round(hour.temperature) + '°',
+        label: displayTemp + '°',
         time: formatHour(hour.time),
-        color: getTemperatureColor(hour.temperature, symbol),
+        color: getTemperatureColor(hour.temperature),
         precipProb: hour.precipProbability,
       };
     });

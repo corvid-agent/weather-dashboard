@@ -6,15 +6,15 @@ export interface ComfortAdvice {
 }
 
 /**
- * Returns clothing/comfort advice based on feels-like temperature (Celsius).
- * If unit is °F, converts first.
+ * Returns clothing/comfort advice based on feels-like temperature.
+ * All inputs are in base units: Celsius, km/h, mm, percentage.
  */
-export function getComfortAdvice(feelsLike: number, unit: string, humidity: number, windSpeed: number, precipProbability: number): ComfortAdvice {
-  const celsius = unit === '°F' ? (feelsLike - 32) * 5 / 9 : feelsLike;
+export function getComfortAdvice(feelsLikeCelsius: number, humidity: number, windSpeedKmh: number, precipProbability: number): ComfortAdvice {
+  const celsius = feelsLikeCelsius;
 
   const rain = precipProbability > 40;
   const umbrella = rain ? ' Bring an umbrella.' : '';
-  const windy = windSpeed > 30; // km/h rough threshold
+  const windy = windSpeedKmh > 30; // km/h — data is always in base units
 
   if (celsius <= -15) {
     return {

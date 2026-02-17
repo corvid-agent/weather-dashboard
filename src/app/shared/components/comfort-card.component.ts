@@ -54,10 +54,13 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
         </div>
         <div class="comfort-info">
           <div class="comfort-temps">
-            <span class="feels-value">{{ current().apparent_temperature | temperature:units.temperatureSymbol() }}</span>
+            <span class="feels-value" [class]="'level-' + advice().level">{{ current().apparent_temperature | temperature:units.temperatureSymbol() }}</span>
             <span class="feels-label">feels like</span>
           </div>
           <span class="comfort-summary" [class]="'level-' + advice().level">{{ advice().summary }}</span>
+          @if (tempDifference()) {
+            <span class="temp-diff">{{ tempDifference() }}</span>
+          }
         </div>
       </div>
       <p class="comfort-clothing">{{ advice().clothing }}</p>
@@ -110,6 +113,17 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
       font-weight: 700;
       line-height: 1;
     }
+    .feels-value.level-freezing { color: var(--temp-freezing); }
+    .feels-value.level-cold { color: var(--temp-cold); }
+    .feels-value.level-cool { color: var(--temp-cool); }
+    .feels-value.level-mild { color: var(--temp-mild); }
+    .feels-value.level-warm { color: var(--temp-warm); }
+    .feels-value.level-hot { color: var(--temp-hot); }
+    .feels-value.level-extreme { color: var(--temp-extreme); }
+    .temp-diff {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+    }
     .feels-label {
       font-size: 0.8rem;
       color: var(--text-tertiary);
@@ -139,11 +153,23 @@ export class ComfortCardComponent {
 
   protected readonly units = inject(UnitPreferencesService);
 
+  /** Describes difference between actual and feels-like temperature */
+  readonly tempDifference = computed(() => {
+    const c = this.current();
+    const diff = c.apparent_temperature - c.temperature_2m;
+    const isFahrenheit = this.units.temperatureUnit() === 'fahrenheit';
+    // Convert the difference for display (for °F, multiply by 9/5 since it's a delta)
+    const displayDiff = isFahrenheit ? Math.round(diff * 9 / 5) : Math.round(diff);
+    if (Math.abs(displayDiff) < 2) return '';
+    const symbol = this.units.temperatureSymbol();
+    if (displayDiff > 0) return `${displayDiff}${symbol} warmer than actual`;
+    return `${Math.abs(displayDiff)}${symbol} colder than actual`;
+  });
+
   readonly advice = computed(() => {
     const c = this.current();
     return getComfortAdvice(
       c.apparent_temperature,
-      this.units.temperatureSymbol(),
       c.relative_humidity_2m,
       c.wind_speed_10m,
       this.precipProbability(),

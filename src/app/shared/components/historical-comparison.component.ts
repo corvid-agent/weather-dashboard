@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { HistoricalComparison } from '../../core/services/historical.service';
+import { HistoricalComparison, ComparisonType } from '../../core/services/historical.service';
 import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
 
 @Component({
@@ -16,12 +16,12 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
           <div class="comp-row">
             <span class="comp-metric">{{ item.metric }}</span>
             <div class="comp-values">
-              <span class="comp-current">{{ item.current | number:'1.0-1' }} {{ item.unit }}</span>
+              <span class="comp-current">{{ convert(item.current, item.type) | number:'1.0-1' }} {{ unitLabel(item.type) }}</span>
               <span class="comp-diff" [class.positive]="item.diff > 0" [class.negative]="item.diff < 0">
-                {{ item.diff > 0 ? '+' : '' }}{{ item.diff | number:'1.0-1' }}
+                {{ item.diff > 0 ? '+' : '' }}{{ convert(item.diff, item.type) | number:'1.0-1' }}
               </span>
             </div>
-            <span class="comp-avg">Avg: {{ item.historical | number:'1.0-1' }} {{ item.unit }}</span>
+            <span class="comp-avg">Avg: {{ convert(item.historical, item.type) | number:'1.0-1' }} {{ unitLabel(item.type) }}</span>
           </div>
         }
       </div>
@@ -64,4 +64,29 @@ export class HistoricalComparisonComponent {
   readonly comparisons = input.required<HistoricalComparison[]>();
 
   protected readonly units = inject(UnitPreferencesService);
+
+  /** Convert base-unit value to display unit */
+  convert(value: number, type: ComparisonType): number {
+    switch (type) {
+      case 'temperature':
+        return this.units.temperatureUnit() === 'fahrenheit' ? value * 9 / 5 + 32 : value;
+      case 'windSpeed': {
+        const wu = this.units.windSpeedUnit();
+        if (wu === 'mph') return value * 0.621371;
+        if (wu === 'ms') return value / 3.6;
+        if (wu === 'kn') return value * 0.539957;
+        return value;
+      }
+      case 'precipitation':
+        return this.units.precipitationUnit() === 'inch' ? value / 25.4 : value;
+    }
+  }
+
+  unitLabel(type: ComparisonType): string {
+    switch (type) {
+      case 'temperature': return this.units.temperatureSymbol();
+      case 'windSpeed': return this.units.windSpeedSymbol();
+      case 'precipitation': return this.units.precipitationSymbol();
+    }
+  }
 }

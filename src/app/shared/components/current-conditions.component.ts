@@ -57,12 +57,12 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
         @if (current().precipitation > 0 || current().rain > 0 || current().snowfall > 0) {
           <div class="detail-item">
             <span class="detail-label">Precipitation</span>
-            <span class="detail-value">{{ current().precipitation }} {{ units.precipitationSymbol() }}</span>
+            <span class="detail-value">{{ formatPrecip(current().precipitation) }}</span>
           </div>
           @if (current().snowfall > 0) {
             <div class="detail-item">
               <span class="detail-label">Snowfall</span>
-              <span class="detail-value">{{ current().snowfall }} cm</span>
+              <span class="detail-value">{{ formatPrecip(current().snowfall) }}</span>
             </div>
           }
         }
@@ -136,10 +136,9 @@ export class CurrentConditionsComponent {
   readonly isDay = computed(() => this.current().is_day === 1);
   readonly weatherDescription = computed(() => getWeatherInfo(this.current().weather_code, this.isDay()).description);
 
+  /** Color based on Celsius value (API always returns Celsius) */
   readonly tempColor = computed(() => {
-    const t = this.current().temperature_2m;
-    const unit = this.units.temperatureSymbol();
-    const c = unit === '°F' ? (t - 32) * 5 / 9 : t;
+    const c = this.current().temperature_2m;
     if (c <= -15) return 'var(--temp-freezing)';
     if (c <= -5) return 'var(--temp-freezing)';
     if (c <= 2) return 'var(--temp-cold)';
@@ -158,6 +157,14 @@ export class CurrentConditionsComponent {
     if (h <= 75) return 'Humid';
     return 'Very humid';
   });
+
+  /** Convert mm to user's preferred unit */
+  formatPrecip(mm: number): string {
+    if (this.units.precipitationUnit() === 'inch') {
+      return (mm / 25.4).toFixed(2) + ' in';
+    }
+    return mm.toFixed(1) + ' mm';
+  }
 
   formatVisibility(meters: number): string {
     if (!meters && meters !== 0) return '—';

@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UnitPreferencesService } from './unit-preferences.service';
 
 const API_URL = 'https://archive-api.open-meteo.com/v1/archive';
 
@@ -18,11 +17,13 @@ export interface HistoricalResponse {
   daily_units: Record<string, string>;
 }
 
+export type ComparisonType = 'temperature' | 'windSpeed' | 'precipitation';
+
 export interface HistoricalComparison {
   metric: string;
-  current: number;
-  historical: number;
-  unit: string;
+  current: number;      // always in base units (°C, km/h, mm)
+  historical: number;   // always in base units
+  type: ComparisonType;
   diff: number;
   diffPercent: number;
 }
@@ -30,8 +31,8 @@ export interface HistoricalComparison {
 @Injectable({ providedIn: 'root' })
 export class HistoricalService {
   private readonly http = inject(HttpClient);
-  private readonly units = inject(UnitPreferencesService);
 
+  /** Always fetches in base units (celsius, km/h, mm) — dashboard handles conversion for display */
   loadHistorical(lat: number, lon: number): Observable<HistoricalResponse> {
     const now = new Date();
     const dates: string[] = [];
@@ -42,7 +43,6 @@ export class HistoricalService {
     const startDate = dates[dates.length - 1];
     const endDate = dates[0];
 
-    const unitParams = this.units.apiParams();
     return this.http.get<HistoricalResponse>(API_URL, {
       params: {
         latitude: lat.toString(),
@@ -51,7 +51,9 @@ export class HistoricalService {
         end_date: endDate,
         daily: 'temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
         timezone: 'auto',
-        ...unitParams,
+        temperature_unit: 'celsius',
+        wind_speed_unit: 'kmh',
+        precipitation_unit: 'mm',
       },
     });
   }

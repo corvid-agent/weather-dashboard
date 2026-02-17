@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
 import { CurrentWeather } from '../../core/models/weather.model';
+import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
 
 interface WeatherAlert {
   type: 'warning' | 'danger';
-  icon: string;
   message: string;
 }
 
@@ -69,21 +69,37 @@ const SEVERE_CODES: Record<number, { type: 'warning' | 'danger'; message: string
 export class WeatherAlertComponent {
   readonly current = input.required<CurrentWeather>();
 
+  private readonly units = inject(UnitPreferencesService);
+
   readonly alerts = computed<WeatherAlert[]>(() => {
     const c = this.current();
     const result: WeatherAlert[] = [];
 
     const severe = SEVERE_CODES[c.weather_code];
     if (severe) {
-      result.push({ type: severe.type, icon: 'alert', message: severe.message });
+      result.push({ type: severe.type, message: severe.message });
     }
 
-    if (c.wind_gusts_10m > 80) {
-      result.push({ type: 'danger', icon: 'wind', message: `Dangerous wind gusts of ${Math.round(c.wind_gusts_10m)} km/h` });
-    } else if (c.wind_gusts_10m > 60) {
-      result.push({ type: 'warning', icon: 'wind', message: `Strong wind gusts of ${Math.round(c.wind_gusts_10m)} km/h` });
+    // Wind gust thresholds — data is always km/h from API
+    const gustsKmh = c.wind_gusts_10m;
+    if (gustsKmh > 80 || gustsKmh > 60) {
+      const displayGusts = this.convertWind(gustsKmh);
+      const windUnit = this.units.windSpeedSymbol();
+      const severity = gustsKmh > 80 ? 'Dangerous' : 'Strong';
+      result.push({
+        type: gustsKmh > 80 ? 'danger' : 'warning',
+        message: `${severity} wind gusts of ${Math.round(displayGusts)} ${windUnit}`,
+      });
     }
 
     return result;
   });
+
+  private convertWind(kmh: number): number {
+    const wu = this.units.windSpeedUnit();
+    if (wu === 'mph') return kmh * 0.621371;
+    if (wu === 'ms') return kmh / 3.6;
+    if (wu === 'kn') return kmh * 0.539957;
+    return kmh;
+  }
 }

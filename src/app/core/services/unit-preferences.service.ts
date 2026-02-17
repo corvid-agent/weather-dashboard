@@ -33,12 +33,6 @@ export class UnitPreferencesService {
   });
   readonly precipitationSymbol = computed(() => this.prefs().precipitation === 'mm' ? 'mm' : 'in');
 
-  readonly apiParams = computed(() => ({
-    temperature_unit: this.prefs().temperature,
-    wind_speed_unit: this.prefs().windSpeed,
-    precipitation_unit: this.prefs().precipitation,
-  }));
-
   setTemperature(unit: TemperatureUnit): void {
     this.update({ temperature: unit });
   }

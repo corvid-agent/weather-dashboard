@@ -57,7 +57,7 @@ import { getUvCategory } from '../../core/utils/uv.utils';
             <div class="day-metrics">
               <div class="metric">
                 <span class="metric-label">Precip</span>
-                <span class="metric-value">{{ day.precipSum }} {{ units.precipitationSymbol() }} ({{ day.precipProbabilityMax }}%)</span>
+                <span class="metric-value">{{ formatPrecip(day.precipSum) }} ({{ day.precipProbabilityMax }}%)</span>
               </div>
               <div class="metric">
                 <span class="metric-label">Wind</span>
@@ -145,6 +145,13 @@ export class DailyForecastComponent implements OnInit {
 
   getUvLevel(index: number): string {
     return getUvCategory(index).level;
+  }
+
+  formatPrecip(mm: number): string {
+    if (this.units.precipitationUnit() === 'inch') {
+      return (mm / 25.4).toFixed(2) + ' in';
+    }
+    return mm.toFixed(1) + ' mm';
   }
 
   private load(lat: number, lon: number): void {

@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { ForecastResponse, HourlyForecast, DailyForecast } from '../models/weather.model';
-import { UnitPreferencesService } from './unit-preferences.service';
 
 const API_URL = 'https://api.open-meteo.com/v1/forecast';
 
@@ -32,10 +31,14 @@ const DAILY_PARAMS = [
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
   private readonly http = inject(HttpClient);
-  private readonly units = inject(UnitPreferencesService);
 
+  /**
+   * Always fetches in base units (celsius, km/h, mm) so that:
+   * - Thresholds in comfort/alert logic work correctly
+   * - Client-side pipes handle conversion for display
+   * - Unit changes are instant (no re-fetch needed)
+   */
   loadForecast(lat: number, lon: number): Observable<ForecastResponse> {
-    const unitParams = this.units.apiParams();
     return this.http.get<ForecastResponse>(API_URL, {
       params: {
         latitude: lat.toString(),
@@ -46,7 +49,9 @@ export class WeatherService {
         timezone: 'auto',
         forecast_days: '7',
         forecast_hours: '48',
-        ...unitParams,
+        temperature_unit: 'celsius',
+        wind_speed_unit: 'kmh',
+        precipitation_unit: 'mm',
       },
     });
   }
