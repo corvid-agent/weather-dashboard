@@ -20,6 +20,8 @@ import { AqiGaugeComponent } from '../../shared/components/aqi-gauge.component';
 import { HistoricalComparisonComponent } from '../../shared/components/historical-comparison.component';
 import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton.component';
 import { ErrorCardComponent } from '../../shared/components/error-card.component';
+import { TemperaturePipe } from '../../shared/pipes/temperature.pipe';
+import { WindSpeedPipe } from '../../shared/pipes/wind-speed.pipe';
 import { getBackgroundGradient } from '../../core/utils/gradient.utils';
 
 type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
@@ -32,6 +34,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     DailyRowComponent, PrecipitationChartComponent, WindCompassComponent,
     UvMeterComponent, AstronomyCardComponent, AqiGaugeComponent,
     HistoricalComparisonComponent, LoadingSkeletonComponent, ErrorCardComponent,
+    TemperaturePipe, WindSpeedPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -112,6 +115,40 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           </div>
 
           <app-current-conditions [current]="forecast()!.current" />
+
+          @if (todayForecast()) {
+            <div class="highlights-row">
+              <div class="highlight-chip">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-orange)" stroke-width="2">
+                  <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-5.07l-1.41 1.41M8.34 15.66l-1.41 1.41m0-12.73l1.41 1.41m8.73 8.73l1.41 1.41"/>
+                  <circle cx="12" cy="12" r="5"/>
+                </svg>
+                <span class="hl-label">High</span>
+                <span class="hl-value">{{ todayForecast()!.tempMax | temperature:units.temperatureSymbol() }}</span>
+              </div>
+              <div class="highlight-chip">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                </svg>
+                <span class="hl-label">Low</span>
+                <span class="hl-value">{{ todayForecast()!.tempMin | temperature:units.temperatureSymbol() }}</span>
+              </div>
+              <div class="highlight-chip">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="var(--accent-blue)" opacity="0.7">
+                  <path d="M8 2l4 8a4.5 4.5 0 11-8 0l4-8z"/>
+                </svg>
+                <span class="hl-label">Rain</span>
+                <span class="hl-value">{{ todayForecast()!.precipProbabilityMax }}%</span>
+              </div>
+              <div class="highlight-chip">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/>
+                </svg>
+                <span class="hl-label">Wind</span>
+                <span class="hl-value">{{ todayForecast()!.windSpeedMax | windSpeed:units.windSpeedSymbol() }}</span>
+              </div>
+            </div>
+          }
 
           <section class="section">
             <div class="section-header">
@@ -277,6 +314,34 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     .fav-btn:active { transform: scale(0.95); }
     .updated-time { margin-left: 6px; }
     .updated-time::before { content: '\\00B7'; margin-right: 6px; }
+    .highlights-row {
+      display: flex;
+      gap: var(--space-sm);
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .highlights-row::-webkit-scrollbar { display: none; }
+    .highlight-chip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .hl-label {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+    .hl-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
     .section {
       display: flex;
       flex-direction: column;
@@ -301,7 +366,7 @@ export class DashboardComponent {
   private readonly weatherService = inject(WeatherService);
   private readonly airQualityService = inject(AirQualityService);
   private readonly historicalService = inject(HistoricalService);
-  private readonly units = inject(UnitPreferencesService);
+  protected readonly units = inject(UnitPreferencesService);
 
   readonly state = signal<LoadState>('idle');
   readonly forecast = signal<ForecastResponse | null>(null);

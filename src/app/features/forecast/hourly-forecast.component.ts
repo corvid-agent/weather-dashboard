@@ -53,7 +53,7 @@ import { formatHour } from '../../core/utils/date.utils';
             <span>Hum</span>
           </div>
           @for (h of hours(); track h.time.getTime()) {
-            <div class="table-row">
+            <div class="table-row" [class.night-row]="!h.isDay">
               <span class="time-col">{{ formatHour(h.time) }}</span>
               <span class="icon-col"><app-weather-icon [code]="h.weatherCode" [isDay]="h.isDay" [size]="24" /></span>
               <span class="temp-col">{{ h.temperature | temperature:units.temperatureSymbol() }}</span>
@@ -101,6 +101,7 @@ import { formatHour } from '../../core/utils/date.utils';
     .time-col { font-weight: 600; }
     .temp-col { font-weight: 600; }
     .precip-col { color: var(--accent-blue); }
+    .night-row { background: rgba(0, 0, 0, 0.15); }
     @media (max-width: 640px) {
       .table-header, .table-row { grid-template-columns: 60px 32px 55px 55px 50px 90px 45px; font-size: 0.78rem; padding: var(--space-xs) var(--space-sm); }
     }
