@@ -5,6 +5,8 @@ import { WeatherService } from '../../core/services/weather.service';
 import { AirQualityService } from '../../core/services/air-quality.service';
 import { HistoricalService, HistoricalComparison } from '../../core/services/historical.service';
 import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
+import { GeolocationService } from '../../core/services/geolocation.service';
+import { GeocodingService } from '../../core/services/geocoding.service';
 import { GeoLocation } from '../../core/models/geocoding.model';
 import { ForecastResponse, HourlyForecast, DailyForecast } from '../../core/models/weather.model';
 import { AirQualityResponse } from '../../core/models/air-quality.model';
@@ -18,6 +20,7 @@ import { UvMeterComponent } from '../../shared/components/uv-meter.component';
 import { AstronomyCardComponent } from '../../shared/components/astronomy-card.component';
 import { AqiGaugeComponent } from '../../shared/components/aqi-gauge.component';
 import { HistoricalComparisonComponent } from '../../shared/components/historical-comparison.component';
+import { ComfortCardComponent } from '../../shared/components/comfort-card.component';
 import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton.component';
 import { ErrorCardComponent } from '../../shared/components/error-card.component';
 import { TemperaturePipe } from '../../shared/pipes/temperature.pipe';
@@ -33,7 +36,8 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     LocationSearchComponent, CurrentConditionsComponent, HourlyChartComponent,
     DailyRowComponent, PrecipitationChartComponent, WindCompassComponent,
     UvMeterComponent, AstronomyCardComponent, AqiGaugeComponent,
-    HistoricalComparisonComponent, LoadingSkeletonComponent, ErrorCardComponent,
+    HistoricalComparisonComponent, ComfortCardComponent,
+    LoadingSkeletonComponent, ErrorCardComponent,
     TemperaturePipe, WindSpeedPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,7 +53,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
             </svg>
           </div>
           <h1 class="welcome-title">Weather Dashboard</h1>
-          <p class="welcome-text">Search for a city or use your location to get started</p>
+          <p class="welcome-text">Detecting your location... or search for a city below</p>
           <div class="welcome-search">
             <app-location-search />
           </div>
@@ -171,6 +175,10 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           </section>
 
           <div class="weather-grid">
+            <app-comfort-card
+              [current]="forecast()!.current"
+              [precipProbability]="todayForecast()?.precipProbabilityMax || 0" />
+
             <app-wind-compass
               [direction]="forecast()!.current.wind_direction_10m"
               [speed]="forecast()!.current.wind_speed_10m"
@@ -366,6 +374,8 @@ export class DashboardComponent {
   private readonly weatherService = inject(WeatherService);
   private readonly airQualityService = inject(AirQualityService);
   private readonly historicalService = inject(HistoricalService);
+  private readonly geolocationService = inject(GeolocationService);
+  private readonly geocodingService = inject(GeocodingService);
   protected readonly units = inject(UnitPreferencesService);
 
   readonly state = signal<LoadState>('idle');
@@ -425,6 +435,36 @@ export class DashboardComponent {
       const bg = this.bgGradient();
       document.querySelector('.weather-bg')?.setAttribute('style', 'background: ' + bg);
     });
+
+    // Auto-detect location on first visit if none saved
+    if (!this.locationService.active()) {
+      this.autoDetectLocation();
+    }
+  }
+
+  private async autoDetectLocation(): Promise<void> {
+    try {
+      this.state.set('loading');
+      const pos = await this.geolocationService.getCurrentPosition();
+      this.geocodingService.reverseGeocode(pos.latitude, pos.longitude).subscribe({
+        next: loc => {
+          this.locationService.setActive(loc);
+        },
+        error: () => {
+          // Reverse geocode failed, use coordinates directly
+          this.locationService.setActive({
+            name: 'My Location',
+            latitude: pos.latitude,
+            longitude: pos.longitude,
+            country: '',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          });
+        },
+      });
+    } catch {
+      // Both browser and IP geolocation failed — show welcome page
+      this.state.set('idle');
+    }
   }
 
   goToLocation(loc: GeoLocation): void {

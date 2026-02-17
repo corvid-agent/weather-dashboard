@@ -48,7 +48,7 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
             </svg>
             <span class="result-text">
               <span class="result-name">Use my location</span>
-              <span class="result-detail">Detect via GPS</span>
+              <span class="result-detail">Auto-detect</span>
             </span>
           </button>
           @if (loading()) {

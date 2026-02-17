@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, inject, signal, effect, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, effect, computed, OnInit } from '@angular/core';
 
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LocationService } from '../../core/services/location.service';
 import { WeatherService } from '../../core/services/weather.service';
 import { UnitPreferencesService } from '../../core/services/unit-preferences.service';
@@ -108,9 +108,14 @@ import { getUvCategory } from '../../core/utils/uv.utils';
     @media (max-width: 480px) { .day-metrics { grid-template-columns: repeat(2, 1fr); } }
   `],
 })
-export class DailyForecastComponent {
+export class DailyForecastComponent implements OnInit {
   private readonly locationService = inject(LocationService);
+  private readonly router = inject(Router);
   readonly locationName = computed(() => this.locationService.active()?.name ?? '');
+
+  ngOnInit(): void {
+    if (!this.locationService.active()) this.router.navigate(['/']);
+  }
   private readonly weatherService = inject(WeatherService);
   protected readonly units = inject(UnitPreferencesService);
 

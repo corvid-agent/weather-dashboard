@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, inject, signal, effect, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, effect, computed, OnInit } from '@angular/core';
 
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { LocationService } from '../../core/services/location.service';
 import { AirQualityService } from '../../core/services/air-quality.service';
@@ -100,9 +100,14 @@ interface PollutantInfo {
     .eu-value { font-size: 1.2rem; font-weight: 700; }
   `],
 })
-export class AirQualityComponent {
+export class AirQualityComponent implements OnInit {
   private readonly locationService = inject(LocationService);
+  private readonly router = inject(Router);
   readonly locationName = computed(() => this.locationService.active()?.name ?? '');
+
+  ngOnInit(): void {
+    if (!this.locationService.active()) this.router.navigate(['/']);
+  }
   private readonly aqService = inject(AirQualityService);
 
   readonly loading = signal(true);
