@@ -49,6 +49,22 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
           <span class="detail-label">Dew Point</span>
           <span class="detail-value">{{ current().dew_point_2m | temperature:units.temperatureSymbol() }}</span>
         </div>
+        <div class="detail-item">
+          <span class="detail-label">Visibility</span>
+          <span class="detail-value">{{ formatVisibility(current().visibility) }}</span>
+        </div>
+        @if (current().precipitation > 0 || current().rain > 0 || current().snowfall > 0) {
+          <div class="detail-item">
+            <span class="detail-label">Precipitation</span>
+            <span class="detail-value">{{ current().precipitation }} {{ units.precipitationSymbol() }}</span>
+          </div>
+          @if (current().snowfall > 0) {
+            <div class="detail-item">
+              <span class="detail-label">Snowfall</span>
+              <span class="detail-value">{{ current().snowfall }} cm</span>
+            </div>
+          }
+        }
       </div>
     </div>
   `,
@@ -113,4 +129,11 @@ export class CurrentConditionsComponent {
 
   readonly isDay = computed(() => this.current().is_day === 1);
   readonly weatherDescription = computed(() => getWeatherInfo(this.current().weather_code, this.isDay()).description);
+
+  formatVisibility(meters: number): string {
+    if (!meters && meters !== 0) return '—';
+    if (meters >= 10000) return (meters / 1000).toFixed(0) + ' km';
+    if (meters >= 1000) return (meters / 1000).toFixed(1) + ' km';
+    return meters.toFixed(0) + ' m';
+  }
 }

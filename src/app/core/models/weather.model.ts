@@ -33,6 +33,7 @@ export interface CurrentWeather {
   wind_direction_10m: number;
   wind_gusts_10m: number;
   dew_point_2m: number;
+  visibility: number;
 }
 
 export interface HourlyData {
