@@ -1,0 +1,16 @@
+{
+  "name": "Weather Dashboard",
+  "short_name": "Weather",
+  "description": "Beautiful weather dashboard with glassmorphism design",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='14' r='6' fill='%23fbbf24'/><ellipse cx='18' cy='22' rx='10' ry='6' fill='%2394a3b8' opacity='0.8'/></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
