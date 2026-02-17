@@ -29,6 +29,9 @@ jobs:
       - name: Type check
         run: bunx tsc --noEmit --skipLibCheck
 
+      - name: Test
+        run: bun test
+
       - name: Build
         run: bunx ng build --configuration production --base-href /weather-dashboard/
 

@@ -180,7 +180,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
           <div class="weather-grid">
             <app-comfort-card
               [current]="forecast()!.current"
-              [precipProbability]="todayForecast()?.precipProbabilityMax || 0" />
+              [precipProbability]="todayForecast()!.precipProbabilityMax || 0" />
 
             <app-wind-compass
               [direction]="forecast()!.current.wind_direction_10m"
