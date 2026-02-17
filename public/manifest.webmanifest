@@ -1,16 +1,19 @@
 {
   "name": "Weather Dashboard",
   "short_name": "Weather",
-  "description": "In-depth weather dashboard — forecasts, air quality, UV, wind, and more",
+  "description": "In-depth weather dashboard — forecasts, air quality, UV, wind, clothing advice, and more",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0d0d0d",
   "theme_color": "#0d0d0d",
+  "orientation": "portrait-primary",
+  "categories": ["weather", "utilities"],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='14' r='6' fill='%23d4a843'/><ellipse cx='18' cy='22' rx='10' ry='6' fill='%2394a3b8' opacity='0.6'/></svg>",
+      "src": "icon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }

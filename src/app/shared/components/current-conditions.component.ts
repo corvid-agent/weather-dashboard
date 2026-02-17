@@ -18,7 +18,7 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
       <div class="hero-main">
         <app-weather-icon [code]="current().weather_code" [isDay]="isDay()" [size]="96" />
         <div class="hero-temp">
-          <span class="temp-value">{{ current().temperature_2m | temperature:units.temperatureSymbol() }}</span>
+          <span class="temp-value" [style.color]="tempColor()">{{ current().temperature_2m | temperature:units.temperatureSymbol() }}</span>
           <span class="temp-desc">{{ weatherDescription() }}</span>
           <span class="temp-feels">Feels like {{ current().apparent_temperature | temperature:units.temperatureSymbol() }}</span>
         </div>
@@ -28,6 +28,7 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
         <div class="detail-item">
           <span class="detail-label">Humidity</span>
           <span class="detail-value">{{ current().relative_humidity_2m }}%</span>
+          <span class="detail-sub">{{ humidityComfort() }}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Wind</span>
@@ -115,6 +116,11 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
       font-size: 1rem;
       font-weight: 600;
     }
+    .detail-sub {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
     @media (max-width: 640px) {
       .hero-main { gap: var(--space-lg); }
       .temp-value { font-size: 3rem; }
@@ -129,6 +135,29 @@ export class CurrentConditionsComponent {
 
   readonly isDay = computed(() => this.current().is_day === 1);
   readonly weatherDescription = computed(() => getWeatherInfo(this.current().weather_code, this.isDay()).description);
+
+  readonly tempColor = computed(() => {
+    const t = this.current().temperature_2m;
+    const unit = this.units.temperatureSymbol();
+    const c = unit === '°F' ? (t - 32) * 5 / 9 : t;
+    if (c <= -15) return 'var(--temp-freezing)';
+    if (c <= -5) return 'var(--temp-freezing)';
+    if (c <= 2) return 'var(--temp-cold)';
+    if (c <= 10) return 'var(--temp-cool)';
+    if (c <= 22) return 'var(--temp-mild)';
+    if (c <= 28) return 'var(--temp-warm)';
+    if (c <= 35) return 'var(--temp-hot)';
+    return 'var(--temp-extreme)';
+  });
+
+  readonly humidityComfort = computed(() => {
+    const h = this.current().relative_humidity_2m;
+    if (h < 25) return 'Very dry';
+    if (h < 40) return 'Dry';
+    if (h <= 60) return 'Comfortable';
+    if (h <= 75) return 'Humid';
+    return 'Very humid';
+  });
 
   formatVisibility(meters: number): string {
     if (!meters && meters !== 0) return '—';
