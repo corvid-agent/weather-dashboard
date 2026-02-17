@@ -20,6 +20,10 @@ import { formatHour } from '../../core/utils/date.utils';
               <!-- Amount bar -->
               <rect [attr.x]="bar.x" [attr.y]="130 - bar.amountHeight" [attr.width]="barW" [attr.height]="bar.amountHeight"
                     fill="var(--accent-blue)" opacity="0.7" rx="2"/>
+              @if (bar.amount > 0) {
+                <text [attr.x]="bar.x + barW / 2" [attr.y]="130 - bar.amountHeight - 14" text-anchor="middle"
+                      fill="var(--text-secondary)" font-size="8">{{ bar.amountLabel }}</text>
+              }
               @if (bar.probHeight > 0) {
                 <text [attr.x]="bar.x + barW / 2" [attr.y]="130 - bar.probHeight - 4" text-anchor="middle"
                       fill="var(--accent-blue)" font-size="9">{{ bar.prob }}%</text>
@@ -51,15 +55,22 @@ export class PrecipitationChartComponent {
 
   readonly bars = computed(() => {
     const data = this.hours();
+    const isInch = this.units.precipitationUnit() === 'inch';
     const maxAmount = Math.max(1, ...data.map(h => h.precipitation));
-    return data.map((h, i) => ({
-      index: i,
-      x: 20 + i * 18,
-      prob: h.precipProbability,
-      probHeight: h.precipProbability * 1,
-      amountHeight: (h.precipitation / maxAmount) * 80,
-      time: formatHour(h.time),
-    }));
+    return data.map((h, i) => {
+      const mm = h.precipitation;
+      const displayAmount = isInch ? mm / 25.4 : mm;
+      return {
+        index: i,
+        x: 20 + i * 18,
+        prob: h.precipProbability,
+        probHeight: h.precipProbability * 1,
+        amount: mm,
+        amountHeight: (mm / maxAmount) * 80,
+        amountLabel: mm > 0 ? (isInch ? displayAmount.toFixed(2) + '"' : displayAmount.toFixed(1)) : '',
+        time: formatHour(h.time),
+      };
+    });
   });
 
   readonly noData = computed(() => this.hours().every(h => h.precipitation === 0 && h.precipProbability === 0));

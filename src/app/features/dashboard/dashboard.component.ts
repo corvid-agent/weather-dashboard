@@ -21,6 +21,7 @@ import { AstronomyCardComponent } from '../../shared/components/astronomy-card.c
 import { AqiGaugeComponent } from '../../shared/components/aqi-gauge.component';
 import { HistoricalComparisonComponent } from '../../shared/components/historical-comparison.component';
 import { ComfortCardComponent } from '../../shared/components/comfort-card.component';
+import { HumidityCardComponent } from '../../shared/components/humidity-card.component';
 import { WeatherAlertComponent } from '../../shared/components/weather-alert.component';
 import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton.component';
 import { ErrorCardComponent } from '../../shared/components/error-card.component';
@@ -37,7 +38,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
     LocationSearchComponent, CurrentConditionsComponent, HourlyChartComponent,
     DailyRowComponent, PrecipitationChartComponent, WindCompassComponent,
     UvMeterComponent, AstronomyCardComponent, AqiGaugeComponent,
-    HistoricalComparisonComponent, ComfortCardComponent, WeatherAlertComponent,
+    HistoricalComparisonComponent, ComfortCardComponent, HumidityCardComponent, WeatherAlertComponent,
     LoadingSkeletonComponent, ErrorCardComponent,
     TemperaturePipe, WindSpeedPipe,
   ],
@@ -185,6 +186,10 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
               [direction]="forecast()!.current.wind_direction_10m"
               [speed]="forecast()!.current.wind_speed_10m"
               [gusts]="forecast()!.current.wind_gusts_10m" />
+
+            <app-humidity-card
+              [humidity]="forecast()!.current.relative_humidity_2m"
+              [dewPoint]="forecast()!.current.dew_point_2m" />
 
             @if (todayForecast()) {
               <app-uv-meter [index]="todayForecast()!.uvIndexMax" />
