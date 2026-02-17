@@ -95,7 +95,7 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(13, 13, 13, 0.92);
+      background: var(--header-bg, rgba(13, 13, 13, 0.92));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
@@ -162,7 +162,7 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       left: 0;
       right: 0;
       z-index: 50;
-      background: rgba(13, 13, 13, 0.95);
+      background: var(--header-bg, rgba(13, 13, 13, 0.95));
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);

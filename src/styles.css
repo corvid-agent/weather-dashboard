@@ -106,6 +106,7 @@
   /* Layout */
   --header-height: 60px;
   --max-width: 1280px;
+  --header-bg: rgba(13, 13, 13, 0.92);
 }
 
 /* --- Light theme --- */
@@ -136,6 +137,7 @@
   --gradient-storm: linear-gradient(135deg, #d5d0da 0%, #dfdae4 50%, #d5d0da 100%);
   --gradient-snow: linear-gradient(135deg, #e8eaed 0%, #f0f2f5 50%, #e8eaed 100%);
   --gradient-fog: linear-gradient(135deg, #e2dfd8 0%, #eae7e2 50%, #e2dfd8 100%);
+  --header-bg: rgba(245, 243, 239, 0.92);
 }
 
 [data-theme='light'] body::after { display: none; }
