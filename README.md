@@ -1,59 +1,46 @@
-# WeatherDashboard
+# Weather Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Real-time weather, air quality, and astronomy dashboard with location search, hourly/daily forecasts, and responsive dark/light themes.
 
-## Development server
+**Live:** [corvid-agent.github.io/weather-dashboard](https://corvid-agent.github.io/weather-dashboard/)
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
-```
+- Current conditions with temperature, humidity, wind, pressure, cloud cover, dew point, and visibility
+- 48-hour hourly forecast with interactive temperature chart
+- 7-day daily forecast with high/low temps, precipitation, wind, UV, sunrise/sunset
+- Precipitation probability chart
+- Wind compass with Beaufort scale
+- UV index meter with safety recommendations
+- Humidity gauge with comfort level
+- Air quality index (AQI) with pollutant breakdown (US & EU scales)
+- Sun & Moon card — sunrise/sunset arc, daylight duration, moon phase
+- "What to Wear" comfort card based on feels-like temperature
+- Historical comparison vs. seasonal averages
+- Location search with autocomplete and geolocation
+- Favorite and recent locations
+- Unit preferences — °C/°F, km/h/mph/m·s/kn, mm/in
+- Dark and light themes
+- Responsive layout with mobile bottom navigation
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tech Stack
 
-## Code scaffolding
+- Angular 21 (standalone components, signals, OnPush)
+- Open-Meteo API (weather, air quality, historical — no API key required)
+- Open-Meteo Geocoding API
+- TypeScript strict mode
+- CSS custom properties with gold-accent theme
+- Playfair Display + Source Sans 3 typography
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Development
 
 ```bash
-ng test
+npm install
+npm start        # dev server on http://localhost:4200
+npm test         # run unit tests
+npm run build    # production build to dist/
 ```
 
-## Running end-to-end tests
+## License
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT
