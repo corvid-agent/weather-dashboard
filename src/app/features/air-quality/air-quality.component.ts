@@ -78,7 +78,7 @@ interface PollutantInfo {
     .back-link:hover { color: var(--accent-gold); }
     .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
-    .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
+    .page-subtitle { font-size: 0.875rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .pollutants { display: flex; flex-direction: column; gap: var(--space-md); }
     .pollutant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-md); }
     .pollutant-item {
@@ -90,9 +90,9 @@ interface PollutantInfo {
       background: var(--bg-surface);
       border-radius: var(--radius);
     }
-    .poll-label { font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .poll-label { font-size: 0.875rem; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
     .poll-value { font-size: 1.5rem; font-weight: 700; }
-    .poll-unit { font-size: 0.75rem; color: var(--text-tertiary); }
+    .poll-unit { font-size: 0.875rem; color: var(--text-tertiary); }
     .eu-aqi { display: flex; flex-direction: column; gap: var(--space-sm); }
     .eu-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-sm) 0; border-bottom: 1px solid var(--border); }
     .eu-row:last-child { border-bottom: none; }

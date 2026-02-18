@@ -254,7 +254,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       margin-top: var(--space-md);
     }
     .recents-label {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-tertiary);
@@ -275,7 +275,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       border: 1px solid var(--border);
       border-radius: var(--radius-full);
       color: var(--text-secondary);
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
     .recent-chip:hover {
@@ -309,7 +309,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       letter-spacing: -0.01em;
     }
     .location-detail {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
     }
     .location-actions {
@@ -357,7 +357,7 @@ type LoadState = 'idle' | 'loading' | 'loaded' | 'error';
       flex-shrink: 0;
     }
     .hl-label {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
       font-weight: 500;
     }

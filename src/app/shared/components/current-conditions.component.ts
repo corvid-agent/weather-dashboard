@@ -79,7 +79,7 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
     }
     .hero-temp { display: flex; flex-direction: column; }
     .temp-value {
-      font-family: var(--font-heading);
+      font-family: var(--font-body);
       font-size: 4rem;
       font-weight: 700;
       line-height: 1;
@@ -106,7 +106,7 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
       gap: 2px;
     }
     .detail-label {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -117,7 +117,7 @@ import { getWeatherInfo } from '../../core/models/weather-codes';
       font-weight: 600;
     }
     .detail-sub {
-      font-size: 0.7rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
       font-style: italic;
     }

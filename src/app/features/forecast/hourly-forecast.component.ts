@@ -82,9 +82,9 @@ import { formatHour } from '../../core/utils/date.utils';
     .back-link:hover { color: var(--accent-gold); }
     .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
-    .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
+    .page-subtitle { font-size: 0.875rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .hourly-table { padding: 0; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
     th, td {
       padding: var(--space-sm) var(--space-sm);
       text-align: left;
@@ -95,7 +95,7 @@ import { formatHour } from '../../core/utils/date.utils';
       color: var(--text-tertiary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -107,10 +107,10 @@ import { formatHour } from '../../core/utils/date.utils';
     .time-col { font-weight: 600; }
     .temp-col { font-weight: 600; }
     .precip-col { color: var(--accent-blue); }
-    .rain-col { font-size: 0.8rem; color: var(--text-secondary); }
+    .rain-col { font-size: 0.875rem; color: var(--text-secondary); }
     .night-row { background: rgba(0, 0, 0, 0.15); }
     @media (max-width: 640px) {
-      th, td { padding: var(--space-xs) var(--space-xs); font-size: 0.75rem; }
+      th, td { padding: var(--space-xs) var(--space-xs); font-size: 0.875rem; }
     }
   `],
 })

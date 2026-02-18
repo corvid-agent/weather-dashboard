@@ -152,12 +152,12 @@ import { GeocodingResult, GeoLocation } from '../../core/models/geocoding.model'
     .locate-btn svg { color: var(--accent-gold); }
     .result-text { display: flex; flex-direction: column; min-width: 0; }
     .result-name { font-weight: 500; font-size: 0.95rem; }
-    .result-detail { font-size: 0.8rem; color: var(--text-tertiary); }
+    .result-detail { font-size: 0.875rem; color: var(--text-tertiary); }
     .result-error {
       padding: var(--space-md);
       text-align: center;
       color: var(--color-error);
-      font-size: 0.85rem;
+      font-size: 0.875rem;
     }
     .result-loading, .result-empty {
       padding: var(--space-lg);

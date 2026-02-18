@@ -31,7 +31,7 @@ import { getUvCategory, getUvPercent } from '../../core/utils/uv.utils';
       gap: var(--space-sm);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -70,7 +70,7 @@ import { getUvCategory, getUvPercent } from '../../core/utils/uv.utils';
     }
     .uv-level { font-size: 1rem; font-weight: 600; }
     .uv-rec {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
       text-align: center;
       margin: 0;

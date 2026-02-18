@@ -96,7 +96,7 @@ import { getUvCategory } from '../../core/utils/uv.utils';
     .back-link:hover { color: var(--accent-gold); }
     .page-title-wrap { display: flex; flex-direction: column; gap: 2px; }
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
-    .page-subtitle { font-size: 0.85rem; color: var(--text-tertiary); font-family: var(--font-body); }
+    .page-subtitle { font-size: 0.875rem; color: var(--text-tertiary); font-family: var(--font-body); }
     .day-detail { display: flex; flex-direction: column; gap: var(--space-md); }
     .day-header { display: flex; align-items: center; gap: var(--space-md); }
     .day-header-text { display: flex; flex-direction: column; }
@@ -107,7 +107,7 @@ import { getUvCategory } from '../../core/utils/uv.utils';
     .low { color: var(--accent-blue); }
     .day-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
     .metric { display: flex; flex-direction: column; gap: 2px; }
-    .metric-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); }
+    .metric-label { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); }
     .metric-value { font-size: 0.9rem; font-weight: 500; }
     @media (max-width: 480px) { .day-metrics { grid-template-columns: repeat(2, 1fr); } }
   `],

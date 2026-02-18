@@ -46,7 +46,7 @@ import { degreesToCompass, getBeaufortScale } from '../../core/utils/wind.utils'
       gap: var(--space-md);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -62,8 +62,8 @@ import { degreesToCompass, getBeaufortScale } from '../../core/utils/wind.utils'
     }
     .wind-speed { font-size: 1.2rem; font-weight: 700; }
     .wind-dir { font-size: 0.9rem; color: var(--text-secondary); }
-    .wind-gusts { font-size: 0.8rem; color: var(--accent-orange); }
-    .wind-beaufort { font-size: 0.75rem; color: var(--text-tertiary); }
+    .wind-gusts { font-size: 0.875rem; color: var(--accent-orange); }
+    .wind-beaufort { font-size: 0.875rem; color: var(--text-tertiary); }
   `],
 })
 export class WindCompassComponent {

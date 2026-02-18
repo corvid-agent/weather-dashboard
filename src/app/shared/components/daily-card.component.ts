@@ -41,7 +41,7 @@ import { formatDayShort } from '../../core/utils/date.utils';
       padding: var(--space-md);
     }
     .day-name {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       color: var(--text-secondary);
     }
@@ -52,7 +52,7 @@ import { formatDayShort } from '../../core/utils/date.utils';
       width: 100%;
     }
     .temp-high { font-weight: 600; font-size: 0.9rem; }
-    .temp-low { color: var(--text-tertiary); font-size: 0.85rem; }
+    .temp-low { color: var(--text-tertiary); font-size: 0.875rem; }
     .temp-bar {
       flex: 1;
       height: 4px;
@@ -72,7 +72,7 @@ import { formatDayShort } from '../../core/utils/date.utils';
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--accent-blue);
     }
   `],

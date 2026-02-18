@@ -30,7 +30,7 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
   styles: [`
     .history-card { display: flex; flex-direction: column; gap: var(--space-md); }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -50,14 +50,14 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
     .comp-values { display: flex; align-items: center; gap: var(--space-sm); }
     .comp-current { font-weight: 600; font-size: 0.95rem; }
     .comp-diff {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       font-weight: 600;
       padding: 2px 6px;
       border-radius: 4px;
     }
     .comp-diff.positive { color: var(--accent-red); background: rgba(248, 113, 113, 0.1); }
     .comp-diff.negative { color: var(--accent-blue); background: rgba(96, 165, 250, 0.1); }
-    .comp-avg { font-size: 0.75rem; color: var(--text-tertiary); }
+    .comp-avg { font-size: 0.875rem; color: var(--text-tertiary); }
   `],
 })
 export class HistoricalComparisonComponent {

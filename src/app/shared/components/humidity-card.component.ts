@@ -37,7 +37,7 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
       gap: var(--space-sm);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -46,7 +46,7 @@ import { UnitPreferencesService } from '../../core/services/unit-preferences.ser
     }
     .gauge-wrap { margin: var(--space-xs) 0; }
     .comfort-label { font-size: 0.95rem; font-weight: 600; }
-    .dew-point { font-size: 0.8rem; color: var(--text-tertiary); }
+    .dew-point { font-size: 0.875rem; color: var(--text-tertiary); }
   `],
 })
 export class HumidityCardComponent {

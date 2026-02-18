@@ -175,12 +175,12 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       text-align: center;
       padding: var(--space-lg);
       color: var(--text-tertiary);
-      font-size: 0.8rem;
+      font-size: 0.875rem;
     }
     .app-footer a { color: var(--accent-gold); }
     .footer-links {
       display: flex; justify-content: center; gap: var(--space-md);
-      margin-top: var(--space-xs); font-size: 0.8rem;
+      margin-top: var(--space-xs); font-size: 0.875rem;
     }
     .footer-links a { color: var(--text-tertiary); transition: color 0.2s; }
     .footer-links a:hover { color: var(--accent-gold); }
@@ -207,7 +207,7 @@ import { LocationSearchComponent } from './shared/components/location-search.com
       gap: 2px;
       padding: var(--space-xs) 0;
       color: var(--text-tertiary);
-      font-size: 0.65rem;
+      font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.02em;
       transition: color 0.2s;

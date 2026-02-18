@@ -132,7 +132,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     .page-title { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .setting-group { display: flex; flex-direction: column; gap: var(--space-md); }
     .group-title {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -147,7 +147,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     }
     .setting-info { display: flex; flex-direction: column; gap: 2px; }
     .setting-label { font-size: 0.95rem; font-weight: 500; }
-    .setting-preview { font-size: 0.75rem; color: var(--text-tertiary); font-style: italic; }
+    .setting-preview { font-size: 0.875rem; color: var(--text-tertiary); font-style: italic; }
     .toggle-group {
       display: flex;
       background: var(--bg-surface);
@@ -160,7 +160,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
       align-items: center;
       gap: var(--space-xs);
       padding: var(--space-sm) var(--space-md);
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 500;
       color: var(--text-secondary);
       transition: background 0.2s, color 0.2s;
@@ -198,7 +198,7 @@ import { GeoLocation } from '../../core/models/geocoding.model';
     }
     .fav-info:hover { background: var(--bg-hover); }
     .fav-name { font-weight: 500; font-size: 0.95rem; }
-    .fav-detail { font-size: 0.8rem; color: var(--text-tertiary); }
+    .fav-detail { font-size: 0.875rem; color: var(--text-tertiary); }
     .remove-btn { width: 44px; height: 44px; }
     .clear-btn { margin-top: var(--space-sm); align-self: flex-start; }
     .about-section { display: flex; flex-direction: column; gap: var(--space-sm); }

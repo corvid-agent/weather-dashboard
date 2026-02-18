@@ -73,7 +73,7 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
       gap: var(--space-md);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -108,7 +108,7 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
       gap: var(--space-sm);
     }
     .feels-value {
-      font-family: var(--font-heading);
+      font-family: var(--font-body);
       font-size: 1.8rem;
       font-weight: 700;
       line-height: 1;
@@ -121,11 +121,11 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
     .feels-value.level-hot { color: var(--temp-hot); }
     .feels-value.level-extreme { color: var(--temp-extreme); }
     .temp-diff {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
     }
     .feels-label {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
     }
     .comfort-summary {
@@ -140,7 +140,7 @@ import { getComfortAdvice } from '../../core/utils/comfort.utils';
     .comfort-summary.level-hot { color: var(--temp-hot); }
     .comfort-summary.level-extreme { color: var(--temp-extreme); }
     .comfort-clothing {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
       line-height: 1.5;
       margin: 0;

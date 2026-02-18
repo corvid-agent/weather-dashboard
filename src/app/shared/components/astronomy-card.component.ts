@@ -65,7 +65,7 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
       gap: var(--space-md);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -90,7 +90,7 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
       flex-direction: column;
       gap: 2px;
     }
-    .dl-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .dl-label { font-size: 0.875rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
     .dl-value { font-size: 0.95rem; font-weight: 600; }
     .moon-section {
       display: flex;
@@ -100,7 +100,7 @@ import { getMoonPhase } from '../../core/utils/moon-phase.utils';
     .moon-emoji { font-size: 2rem; }
     .moon-detail { display: flex; flex-direction: column; }
     .moon-phase { font-size: 0.95rem; font-weight: 600; }
-    .moon-illum { font-size: 0.8rem; color: var(--text-tertiary); }
+    .moon-illum { font-size: 0.875rem; color: var(--text-tertiary); }
   `],
 })
 export class AstronomyCardComponent {

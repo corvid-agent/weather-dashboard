@@ -38,7 +38,7 @@ import { getAqiCategory } from '../../core/utils/aqi.utils';
       gap: var(--space-sm);
     }
     .card-label {
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -48,7 +48,7 @@ import { getAqiCategory } from '../../core/utils/aqi.utils';
     .gauge-wrap { margin: var(--space-sm) 0; }
     .aqi-level { font-size: 1.1rem; font-weight: 600; }
     .aqi-rec {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       color: var(--text-tertiary);
       text-align: center;
       margin: 0;
