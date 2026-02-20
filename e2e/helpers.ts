@@ -320,6 +320,35 @@ export async function mockAllApis(page: Page): Promise<void> {
       }),
     });
   });
+
+  // Block IP geolocation to prevent auto-detection interfering with tests
+  await page.route('**/ipapi.co/**', async (route: Route) => {
+    await route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+  });
+}
+
+/**
+ * Block geolocation and IP-based location APIs so the app falls back to idle/welcome state.
+ */
+export async function blockGeolocation(page: Page): Promise<void> {
+  // Block IP geolocation API
+  await page.route('**/ipapi.co/**', route =>
+    route.fulfill({ status: 500, contentType: 'application/json', body: '{}' })
+  );
+
+  // Override browser geolocation to deny permission
+  await page.context().grantPermissions([], { origin: 'http://localhost:4280' });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'geolocation', {
+      value: {
+        getCurrentPosition: (_success: any, error: any) => {
+          if (error) error({ code: 1, message: 'User denied Geolocation' });
+        },
+        watchPosition: () => 0,
+        clearWatch: () => {},
+      },
+    });
+  });
 }
 
 /**
