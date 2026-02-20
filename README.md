@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/preview.png" alt="weather-dashboard preview" width="100%"></p>
+
 # Weather Dashboard
 
 Real-time weather, air quality, and astronomy dashboard with location search, hourly/daily forecasts, and responsive dark/light themes.
